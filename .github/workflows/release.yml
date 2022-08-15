@@ -44,7 +44,7 @@ jobs:
       with:
         name: lpk-${{ matrix.mode }}
         path: |
-          ./src/dsc/bin/Release/netcoreapp3.1/${{ matrix.mode }}/publish/*.zip
+          ${{ github.workspace }}/src/dsc/bin/Release/netcoreapp3.1/${{ matrix.mode }}/publish/${{ matrix.mode }}.zip
   release:
     runs-on: windows-latest
     needs: build
@@ -73,7 +73,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ github.workspace }}\lpk-win-x64\
+        asset_path: ${{ github.workspace }}\${{ matrix.mode }}\
         asset_name: lpk-win.zip
         asset_content_type: application/zip
     - name: Upload Linux Release Assets
@@ -82,7 +82,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ github.workspace }}\lpk-linux-x64\
+        asset_path: ${{ github.workspace }}\${{ matrix.mode }}\
         asset_name: lpk-linux.zip
         asset_content_type: application/zip
     - name: Upload OSX Release Assets
@@ -91,6 +91,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ github.workspace }}\lpk-osx-x64\
+        asset_path: ${{ github.workspace }}\${{ matrix.mode }}\
         asset_name: lpk-osx.zip
         asset_content_type: application/zip
