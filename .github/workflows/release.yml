@@ -9,7 +9,8 @@ jobs:
     runs-on: windows-latest
     strategy:
       matrix:
-        mode: [osx-x64,linux-x64,win-x64]
+        # mode: [osx-x64,linux-x64,win-x64]
+        mode: [win-x64]
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -31,35 +32,19 @@ jobs:
         inlineScript: |
           Copy-Item -Path ${{ github.workspace }}/src/EndpointManagerLauncher/bin/Release/netcoreapp3.1/win-x64/publish/ -Destination ${{ github.workspace }}/src/dsc/bin/Release/netcoreapp3.1/win-x64/publish/EndpointManagerLauncher -Recurse -Exclude **/*.pdb   
         azPSVersion: '3.1.0'
-    # - name: Create .Zip files (${{ matrix.mode }})
-    #   uses: TheDoctor0/zip-release@0.6.2
-    #   with:
-    #     type: 'zip'
-    #     filename: 'lpk-${{ matrix.mode }}.zip'
-    #     path: ${{ github.workspace }}/src/dsc/bin/Release/netcoreapp3.1/${{ matrix.mode }}/publish
-    #     exclusions: '**/*.pdb **/*.xml **/*.nuspec **/cs/* **/de/* **/es/* **/fr/* **/it/* **/ja/* **/ko/* **/pl/* **/pt-BR/* **/ru/* **/tr/* **/zh-Hans/* **/zh-Hant/*'
+    - name: Create .Zip files (${{ matrix.mode }})
+      uses: TheDoctor0/zip-release@0.6.2
+      with:
+        type: 'zip'
+        filename: 'lpk-${{ matrix.mode }}.zip'
+        path: ${{ github.workspace }}/src/dsc/bin/Release/netcoreapp3.1/${{ matrix.mode }}/publish
+        exclusions: '**/*.pdb **/*.xml **/*.nuspec **/cs/* **/de/* **/es/* **/fr/* **/it/* **/ja/* **/ko/* **/pl/* **/pt-BR/* **/ru/* **/tr/* **/zh-Hans/* **/zh-Hant/*'
     - name: Upload Release
       uses: actions/upload-artifact@v3
       with:
         name: lpk-${{ matrix.mode }}
         path: |
-          ./src/dsc/bin/Release/netcoreapp3.1/${{ matrix.mode }}/publish/**
-          !**/*.pdb
-          !**/*.xml
-          !**/*.nuspec
-          !**/cs/*
-          !**/de/*
-          !**/es/*
-          !**/fr/*
-          !**/it/*
-          !**/ja/*
-          !**/ko/*
-          !**/pl/*
-          !**/pt-BR/*
-          !**/ru/*
-          !**/tr/*
-          !**/zh-Hans/*
-          !**/zh-Hant/*
+          ./src/dsc/bin/Release/netcoreapp3.1/${{ matrix.mode }}/publish/*.zip
   release:
     runs-on: windows-latest
     needs: build
@@ -88,7 +73,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ github.workspace }}/lpk-win-x64/**
+        asset_path: ${{ github.workspace }}\lpk-win-x64\
         asset_name: lpk-win.zip
         asset_content_type: application/zip
     - name: Upload Linux Release Assets
@@ -97,7 +82,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ github.workspace }}/lpk-linux-x64/**
+        asset_path: ${{ github.workspace }}\lpk-linux-x64\
         asset_name: lpk-linux.zip
         asset_content_type: application/zip
     - name: Upload OSX Release Assets
@@ -106,6 +91,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ github.workspace }}/lpk-osx-x64/**
+        asset_path: ${{ github.workspace }}\lpk-osx-x64\
         asset_name: lpk-osx.zip
         asset_content_type: application/zip
