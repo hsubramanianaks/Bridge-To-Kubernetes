@@ -4,8 +4,6 @@ on:
     tags:
       - "v*.*.*"
 
-env:
-  SELF_CONTAINED: true
 jobs:
   build:
     runs-on: windows-latest
@@ -23,7 +21,7 @@ jobs:
     - name: Restore dependencies using Nuget
       run: nuget restore src\client.sln -Verbosity Normal -NonInteractive -ConfigFile src/nuget.config
     - name: dotnet Publish for ${{ matrix.mode }}
-      run: dotnet publish src\dsc\dsc.csproj -c Release -r ${{ matrix.mode }} --no-restore --self-contained {{ $env.SELF_CONTAINED }} --verbosity normal
+      run: dotnet publish src\dsc\dsc.csproj -c Release -r ${{ matrix.mode }} --no-restore --self-contained true --verbosity normal
     - name: Build endpointmanagerlauncher
       run: dotnet publish src\EndpointManagerLauncher\endpointmanagerlauncher.csproj -r win-x64 -c Release --no-restore
     - name: Copy endpointmanagerlauncher
