@@ -67,8 +67,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ steps.changelog_reader.outputs.current_version  }}
-        release_name: ${{ steps.changelog_reader.outputs.current_version  }}
+        tag_name: ${{ steps.tag_name.outputs.current_version  }}
+        release_name: ${{ steps.tag_name.outputs.current_version  }}
         draft: false
         prerelease: false
         body_path: CHANGELOG.md
