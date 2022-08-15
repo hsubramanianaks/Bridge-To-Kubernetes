@@ -20,9 +20,9 @@ jobs:
     - name: Setup NuGet.exe for use with actions
       uses: NuGet/setup-nuget@v1.0.6
     - name: Restore dependencies using Nuget
-      run: nuget restore src/client.sln -Verbosity Normal -NonInteractive -ConfigFile src/nuget.config
+      run: nuget restore src\client.sln -Verbosity Normal -NonInteractive -ConfigFile src/nuget.config
     - name: dotnet Publish for ${{ matrix.mode }}
-      run: dotnet publish src/dsc/dsc.csproj -c Release -r ${{ matrix.mode }} --no-restore --self-contained true --verbosity normal
+      run: dotnet publish src\dsc\dsc.csproj -c Release -r ${{ matrix.mode }} --no-restore --self-contained true --verbosity normal
     - name: Build endpointmanagerlauncher
       run: dotnet publish src\EndpointManagerLauncher\endpointmanagerlauncher.csproj -r win-x64 -c Release --no-restore
     - name: Copy endpointmanagerlauncher
@@ -30,21 +30,21 @@ jobs:
       if: ${{ matrix.mode == 'win-x64' }}
       with:
         inlineScript: |
-          Copy-Item -Path ${{ github.workspace }}/src/EndpointManagerLauncher/bin/Release/netcoreapp3.1/win-x64/publish/ -Destination ${{ github.workspace }}/src/dsc/bin/Release/netcoreapp3.1/win-x64/publish/EndpointManagerLauncher -Recurse -Exclude **/*.pdb   
+          Copy-Item -Path ${{ github.workspace }}\src\EndpointManagerLauncher\bin\Release\netcoreapp3.1\win-x64\publish\ -Destination ${{ github.workspace }}\src\dsc\bin\Release\netcoreapp3.1\win-x64\publish\EndpointManagerLauncher -Recurse -Exclude **/*.pdb   
         azPSVersion: '3.1.0'
     - name: Create .Zip files (${{ matrix.mode }})
       uses: TheDoctor0/zip-release@0.6.2
       with:
         type: 'zip'
         filename: 'lpk-${{ matrix.mode }}.zip'
-        path: ${{ github.workspace }}/src/dsc/bin/Release/netcoreapp3.1/${{ matrix.mode }}/publish
+        path: ${{ github.workspace }}\src\dsc\bin\Release\netcoreapp3.1\${{ matrix.mode }}\publish\
         exclusions: '**/*.pdb **/*.xml **/*.nuspec **/cs/* **/de/* **/es/* **/fr/* **/it/* **/ja/* **/ko/* **/pl/* **/pt-BR/* **/ru/* **/tr/* **/zh-Hans/* **/zh-Hant/*'
     - name: Upload Release
       uses: actions/upload-artifact@v3
       with:
         name: lpk-${{ matrix.mode }}
         path: |
-          ${{ github.workspace }}/src/dsc/bin/Release/netcoreapp3.1/${{ matrix.mode }}/publish/lpk-${{ matrix.mode }}.zip
+          ${{ github.workspace }}\src\dsc\bin\Release\netcoreapp3.1\${{ matrix.mode }}\publish\lpk-${{ matrix.mode }}.zip
   release:
     runs-on: windows-latest
     needs: build
