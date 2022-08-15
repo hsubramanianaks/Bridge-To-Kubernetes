@@ -73,7 +73,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ github.workspace }}\lpk-win-x64.zip
+        asset_path: ${{ github.workspace }}\lpk-win-x64\lpk-win-x64.zip
         asset_name: lpk-win.zip
         asset_content_type: application/zip
     # - name: Upload Linux Release Assets
