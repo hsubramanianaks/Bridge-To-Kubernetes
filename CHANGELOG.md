@@ -4,3 +4,9 @@
 ### Added
 - Initial Release from internal repo
 - Add github workflows for code ql, release and build
+
+## [0.0.9] - 2022-08-15
+### Added
+- Initial Release from internal repo
+- Add github workflows for code ql, release and build
+- Add kubectl library download step
