@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.0.8] - 2022-08-16
+## [0.0.1] - 2022-08-16
 ### Added
 - Initial Release from internal repo
 - Add github workflows for code ql, release binaries
