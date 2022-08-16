@@ -47,8 +47,8 @@ jobs:
           }
           Write-Output "url is: "$url
           Write-Output "directory is: "$dir
-          New-Item -Path ${{ github.workspace }}\src\dsc\bin\Release\netcoreapp3.1\${{ matrix.mode }}\publish\kubectl -ItemType Directory
-          $fileName = ${{ github.workspace }}\src\dsc\bin\Release\netcoreapp3.1\${{ matrix.mode }}\publish\kubectl\$dir
+          New-Item -Path '${{ github.workspace }}\src\dsc\bin\Release\netcoreapp3.1\${{ matrix.mode }}\publish\kubectl' -ItemType Directory
+          $fileName = '${{ github.workspace }}\src\dsc\bin\Release\netcoreapp3.1\${{ matrix.mode }}\publish\kubectl\'+$dir
           New-Item -Path $fileName -ItemType Directory
           curl $url -O $fileName
         azPSVersion: '3.1.0'
