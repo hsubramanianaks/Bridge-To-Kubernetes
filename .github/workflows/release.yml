@@ -46,7 +46,7 @@ jobs:
             $url = 'https://storage.googleapis.com/kubernetes-release/release/v1.21.2/bin/linux/amd64/kubectl'
             $dir = 'linux'
           }
-          Write-Ouput "url is: "$url
+          Write-Output "url is: "$url
           New-Item -Path './src/dsc/bin/Release/netcoreapp3.1/${{ matrix.mode }}/publish/kubectl/$dir' -ItemType Directory
           curl $url -OutFile ./src/dsc/bin/Release/netcoreapp3.1/${{ matrix.mode }}/publish/kubectl/$dir/kubectl.exe
         azPSVersion: '3.1.0'
