@@ -39,7 +39,7 @@ jobs:
           if (${{ matrix.mode }} -eq 'win-x64') {
             $url =  https://storage.googleapis.com/kubernetes-release/release/v1.21.2/bin/windows/amd64/kubectl.exe
             $dir = 'win'
-          } else if (${{ matrix.mode }} -eq 'osx-x64') {
+          } elseif (${{ matrix.mode }} -eq 'osx-x64') {
             $url = https://storage.googleapis.com/kubernetes-release/release/v1.21.2/bin/darwin/amd64/kubectl
             $dir = 'osx'
           } else {
