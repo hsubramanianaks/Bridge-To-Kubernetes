@@ -35,7 +35,6 @@ jobs:
       uses: Azure/powershell@v1
       with:
         inlineScript: |
-          New-Item -Path './src/dsc/bin/Release/netcoreapp3.1/${{ matrix.mode }}/publish/kubectl' -ItemType Directory
           if ('${{ matrix.mode }}' -eq 'win-x64') {
             $url =  'https://storage.googleapis.com/kubernetes-release/release/v1.21.2/bin/windows/amd64/kubectl.exe'
             $dir = 'win'
@@ -47,8 +46,9 @@ jobs:
             $dir = 'linux'
           }
           Write-Output "url is: "$url
+          New-Item -Path './src/dsc/bin/Release/netcoreapp3.1/${{ matrix.mode }}/publish/kubectl' -ItemType Directory
           New-Item -Path './src/dsc/bin/Release/netcoreapp3.1/${{ matrix.mode }}/publish/kubectl/$dir' -ItemType Directory
-          curl $url -OutFile ./src/dsc/bin/Release/netcoreapp3.1/${{ matrix.mode }}/publish/kubectl/$dir/kubectl.exe
+          curl $url -O ./src/dsc/bin/Release/netcoreapp3.1/${{ matrix.mode }}/publish/kubectl/$dir/kubectl.exe
         azPSVersion: '3.1.0'
     - name: Create .Zip files (${{ matrix.mode }})
       uses: TheDoctor0/zip-release@0.6.2
