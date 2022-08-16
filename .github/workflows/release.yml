@@ -46,9 +46,10 @@ jobs:
             $dir = 'linux'
           }
           Write-Output "url is: "$url
+          Write-Output "directory is: "$(dir)
           New-Item -Path './src/dsc/bin/Release/netcoreapp3.1/${{ matrix.mode }}/publish/kubectl' -ItemType Directory
-          New-Item -Path './src/dsc/bin/Release/netcoreapp3.1/${{ matrix.mode }}/publish/kubectl/$dir' -ItemType Directory
-          curl $url -O ./src/dsc/bin/Release/netcoreapp3.1/${{ matrix.mode }}/publish/kubectl/$dir/kubectl.exe
+          New-Item -Path './src/dsc/bin/Release/netcoreapp3.1/${{ matrix.mode }}/publish/kubectl/$(dir)' -ItemType Directory
+          curl $url -O './src/dsc/bin/Release/netcoreapp3.1/${{ matrix.mode }}/publish/kubectl/$(dir)/kubectl.exe'
         azPSVersion: '3.1.0'
     - name: Create .Zip files (${{ matrix.mode }})
       uses: TheDoctor0/zip-release@0.6.2
