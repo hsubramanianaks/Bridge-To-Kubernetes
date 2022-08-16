@@ -31,6 +31,24 @@ jobs:
         inlineScript: |
           Copy-Item -Path ${{ github.workspace }}\src\EndpointManagerLauncher\bin\Release\netcoreapp3.1\win-x64\publish\ -Destination ${{ github.workspace }}\src\dsc\bin\Release\netcoreapp3.1\win-x64\publish\EndpointManagerLauncher -Recurse -Exclude **/*.pdb   
         azPSVersion: '3.1.0'
+    - name: Download Kubectl
+      uses: Azure/powershell@v1
+      with:
+        inlineScript: |
+          New-Item -Path './src/dsc/bin/Release/netcoreapp3.1/${{ matrix.mode }}/publish/kubectl' -ItemType Directory
+          if (${{ matrix.mode }} -eq 'win-x64') {
+            $url =  https://storage.googleapis.com/kubernetes-release/release/v1.21.2/bin/windows/amd64/kubectl.exe
+            $dir = 'win'
+          } else if (${{ matrix.mode }} -eq 'osx-x64') {
+            $url = https://storage.googleapis.com/kubernetes-release/release/v1.21.2/bin/darwin/amd64/kubectl
+            $dir = 'osx'
+          } else {
+            $url = https://storage.googleapis.com/kubernetes-release/release/v1.21.2/bin/linux/amd64/kubectl
+            $dir = 'linux'
+          }
+          New-Item -Path './src/dsc/bin/Release/netcoreapp3.1/${{ matrix.mode }}/publish/kubectl/$dir' -ItemType Directory
+          curl $url -OutFile ./src/dsc/bin/Release/netcoreapp3.1/${{ matrix.mode }}/publish/kubectl/$dir/kubectl.exe
+        azPSVersion: '3.1.0'
     - name: Create .Zip files (${{ matrix.mode }})
       uses: TheDoctor0/zip-release@0.6.2
       with:
