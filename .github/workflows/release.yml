@@ -37,13 +37,13 @@ jobs:
         inlineScript: |
           New-Item -Path './src/dsc/bin/Release/netcoreapp3.1/${{ matrix.mode }}/publish/kubectl' -ItemType Directory
           if ('${{ matrix.mode }}' -eq 'win-x64') {
-            $url =  https://storage.googleapis.com/kubernetes-release/release/v1.21.2/bin/windows/amd64/kubectl.exe
+            $url =  'https://storage.googleapis.com/kubernetes-release/release/v1.21.2/bin/windows/amd64/kubectl.exe'
             $dir = 'win'
           } elseif ('${{ matrix.mode }}' -eq 'osx-x64') {
-            $url = https://storage.googleapis.com/kubernetes-release/release/v1.21.2/bin/darwin/amd64/kubectl
+            $url = 'https://storage.googleapis.com/kubernetes-release/release/v1.21.2/bin/darwin/amd64/kubectl'
             $dir = 'osx'
           } else {
-            $url = https://storage.googleapis.com/kubernetes-release/release/v1.21.2/bin/linux/amd64/kubectl
+            $url = 'https://storage.googleapis.com/kubernetes-release/release/v1.21.2/bin/linux/amd64/kubectl'
             $dir = 'linux'
           }
           New-Item -Path './src/dsc/bin/Release/netcoreapp3.1/${{ matrix.mode }}/publish/kubectl/$dir' -ItemType Directory
