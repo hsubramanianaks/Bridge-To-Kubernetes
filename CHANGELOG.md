@@ -5,7 +5,7 @@
 - Initial Release from internal repo
 - Add github workflows for code ql, release and build
 
-## [0.0.16] - 2022-08-15
+## [0.0.17] - 2022-08-15
 ### Added
 - Initial Release from internal repo
 - Add github workflows for code ql, release and build
