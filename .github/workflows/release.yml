@@ -1,4 +1,4 @@
-name: release
+name: release binaries
 on: 
   push:
     tags:
@@ -36,21 +36,26 @@ jobs:
       with:
         inlineScript: |
           if ('${{ matrix.mode }}' -eq 'win-x64') {
-            $url =  'https://storage.googleapis.com/kubernetes-release/release/v1.21.2/bin/windows/amd64/kubectl.exe'
+            $url = 'https://storage.googleapis.com/kubernetes-release/release/v1.21.2/bin/windows/amd64/kubectl.exe'
             $dir = 'win'
+            $file = 'kubectl.exe'
           } elseif ('${{ matrix.mode }}' -eq 'osx-x64') {
             $url = 'https://storage.googleapis.com/kubernetes-release/release/v1.21.2/bin/darwin/amd64/kubectl'
             $dir = 'osx'
+            $file = 'kubectl'
           } else {
             $url = 'https://storage.googleapis.com/kubernetes-release/release/v1.21.2/bin/linux/amd64/kubectl'
             $dir = 'linux'
+            $file = 'kubectl'
           }
           Write-Output "url is: "$url
           Write-Output "directory is: "$dir
+          Write-Output "file is: "$file
           New-Item -Path '${{ github.workspace }}\src\dsc\bin\Release\netcoreapp3.1\${{ matrix.mode }}\publish\kubectl' -ItemType Directory
-          $fileName = '${{ github.workspace }}\src\dsc\bin\Release\netcoreapp3.1\${{ matrix.mode }}\publish\kubectl\'+$dir
+          $fileName = '${{ github.workspace }}\src\dsc\bin\Release\netcoreapp3.1\${{ matrix.mode }}\publish\kubectl\'+$dir+$file
+          Write-Output "file name is: "$fileName
           New-Item -Path $fileName -ItemType Directory
-          curl $url -O $fileName
+          curl.exe $url -o $fileName
         azPSVersion: '3.1.0'
     - name: Create .Zip files (${{ matrix.mode }})
       uses: TheDoctor0/zip-release@0.6.2
