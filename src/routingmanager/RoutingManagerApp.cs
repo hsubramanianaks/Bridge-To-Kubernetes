@@ -329,7 +329,7 @@ namespace Microsoft.BridgeToKubernetes.RoutingManager
                         var servicePort = path?.Backend?.Service?.Port?.Name;
                         // if port name is not present get the port number for ingress
                         if (string.IsNullOrEmpty(servicePort)) {
-                            servicePort = path?.Backend?.Service?.Port?.Number;
+                            servicePort = path?.Backend?.Service?.Port?.Number.ToString();
                         }
                         if (!string.IsNullOrWhiteSpace(serviceName))
                         {
