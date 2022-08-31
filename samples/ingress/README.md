@@ -107,7 +107,16 @@ Your development computer is connected when the VS Code status bar turns orange 
 ![](images/debugging.png)
 
 
-Navigate to the frontend entry point of your todo-app. For minikube, we'll be using `127.0.0.1`.
+Navigate to the frontend ingress path of your todo-app using following command. 
+
+```
+kubectl get ingress -n todo-app-ingress
+
+NAME           CLASS   HOSTS                 ADDRESS          PORTS   AGE
+todo-ingress   nginx   todoapp.ingress.com   20.237.125.234   80      8m30s
+```
+
+For minikube, we'll be using `127.0.0.1`.
 
 Make a request to the stats-api by clicking on the `stats` link. 
 
