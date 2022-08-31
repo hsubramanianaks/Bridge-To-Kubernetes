@@ -44,7 +44,7 @@ NAME          TYPE           CLUSTER-IP     EXTERNAL-IP      PORT(S)        AGE
 frontend      ClusterIP   10.0.49.177    127.0.0.1   80:30145/TCP   18h
 ```
 
-Browse to the application using the external IP and give it a spin. As you add, complete and delete todos, notice that the stats page updates with the expected metrics
+Browse to the application using the ingress `todoapp.ingress.com` and give it a spin. As you add, complete and delete todos, notice that the stats page updates with the expected metrics
 
 ## Debug the stats-api service
 
