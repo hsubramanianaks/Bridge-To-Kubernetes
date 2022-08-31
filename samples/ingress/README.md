@@ -1,4 +1,4 @@
-# TODO Application Sample
+# TODO Application Sample with Ingress
 
 This sample illustrates how Bridge to Kubernetes can be used to develop a microservice version of the celebrated TODO application on any Kubernetes cluster. This sample has been adapted from code provided by [TodoMVC](http://todomvc.com).
 
@@ -24,13 +24,13 @@ In this example, we will use a local cluster, MiniKube.
 First, create a namespace for the sample.
 
 ```
-kubectl create namespace todo-app
+kubectl create namespace todo-app-ingress
 ```
 
 Then, apply the deployment manifest:
 
 ```
-kubectl apply -n todo-app -f deployment.yaml
+kubectl apply -n todo-app-ingress -f deployment.yaml
 ```
 
 This is a simple deployment that exposes the frontend using a service of type `LoadBalancer`. Wait for all the pods to be running and for the external IP of the `frontend` service to become available.
@@ -38,10 +38,10 @@ This is a simple deployment that exposes the frontend using a service of type `L
 If you are testing with MiniKube, you will need to use `minikube tunnel` to resolve an external IP.
 
 ```
-kubectl get services -n todo-app
+kubectl get services -n todo-app-ingress
 
 NAME          TYPE           CLUSTER-IP     EXTERNAL-IP      PORT(S)        AGE
-frontend      LoadBalancer   10.0.49.177    127.0.0.1   80:30145/TCP   18h
+frontend      ClusterIP   10.0.49.177    127.0.0.1   80:30145/TCP   18h
 ```
 
 Browse to the application using the external IP and give it a spin. As you add, complete and delete todos, notice that the stats page updates with the expected metrics
