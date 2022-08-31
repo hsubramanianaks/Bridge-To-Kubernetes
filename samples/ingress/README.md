@@ -33,7 +33,7 @@ Then, apply the deployment manifest:
 kubectl apply -n todo-app-ingress -f deployment.yaml
 ```
 
-This is a simple deployment that exposes the frontend using a service of type `LoadBalancer`. Wait for all the pods to be running and for the external IP of the `frontend` service to become available.
+This is a simple deployment that exposes the frontend using nginx ingress. Wait for all the pods to be running and for the ingress to become available.
 
 If you are testing with MiniKube, you will need to use `minikube tunnel` to resolve an external IP.
 
@@ -42,6 +42,14 @@ kubectl get services -n todo-app-ingress
 
 NAME          TYPE           CLUSTER-IP     EXTERNAL-IP      PORT(S)        AGE
 frontend      ClusterIP   10.0.49.177    127.0.0.1   80:30145/TCP   18h
+```
+
+To get the ingress use the following 
+```
+kubectl get ingress -n todo-app-ingress
+
+NAME           CLASS   HOSTS                 ADDRESS          PORTS   AGE
+todo-ingress   nginx   todoapp.ingress.com   20.237.125.234   80      8m30s
 ```
 
 Browse to the application using the ingress `todoapp.ingress.com` and give it a spin. As you add, complete and delete todos, notice that the stats page updates with the expected metrics
