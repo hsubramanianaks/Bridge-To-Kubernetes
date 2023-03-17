@@ -25,6 +25,6 @@ jobs:
     - name: Test service URLs
       run: |
         minikube service list -n todo-app
-        minikube service stats-api -n todo-app --url
+        minikube service frontend -n todo-app --url
         echo "------------------opening the service------------------"
-        curl $(minikube service stats-api -n todo-app --url)        
+        curl $(minikube service frontend -n todo-app --url)        
