@@ -25,4 +25,4 @@ jobs:
     - name: Test service URLs
       run: |
         echo "------------------opening the service------------------"
-        curl --location $(kubectl get svc -n todo-app --output json | jq '.items[] | select(.metadata.name == "frontend")'.status.loadBalancer.ingress[0].ip)       
+        curl --location kubectl get svc -n todo-app --output json | jq '.items[] | select(.metadata.name == "frontend")'.status.loadBalancer.ingress[0] | grep -Eo '[0-9.]{7,14}'       
