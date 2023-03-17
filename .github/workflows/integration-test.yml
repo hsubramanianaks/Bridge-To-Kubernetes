@@ -24,7 +24,5 @@ jobs:
         kubectl apply -f https://raw.githubusercontent.com/Azure/Bridge-To-Kubernetes/main/samples/todo-app/deployment.yaml -n todo-app
     - name: Test service URLs
       run: |
-        minikube service list -n todo-app
-        minikube service frontend -n todo-app --url
         echo "------------------opening the service------------------"
-        curl $(minikube service frontend -n todo-app --url)        
+        curl --location $(kubectl get svc -n todo-app --output json | jq '.items[] | select(.metadata.name == "frontend")'.status.loadBalancer.ingress[0].ip)       
