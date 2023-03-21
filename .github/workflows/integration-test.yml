@@ -22,13 +22,8 @@ jobs:
     - name: Deploy todo-app
       run:
         kubectl apply -f https://raw.githubusercontent.com/Azure/Bridge-To-Kubernetes/main/samples/todo-app/deployment.yaml -n todo-app
-    - name: Install and validate jq
-      run: |
-       sudo apt-get install jq
-       jq --version
     - name: Test service URLs
       run: |
         kubectl get services -n todo-app --output json > services.json
-        jq '.items[] | select(.metadata.name == "frontend")'.status.loadBalancer.ingress[0].ip services.json
-        echo "------------------opening the service------------------"
-        curl --location $(kubectl get services -n todo-app --output json | jq '.items[] | select(.metadata.name == "frontend")'.status.loadBalancer.ingress[0].ip)       
+        cat services.json
+        jq '.items[] | select(.metadata.name == "frontend")'.status.loadBalancer.ingress[0].ip services.json     
