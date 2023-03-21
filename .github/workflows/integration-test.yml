@@ -24,6 +24,5 @@ jobs:
         kubectl apply -f https://raw.githubusercontent.com/Azure/Bridge-To-Kubernetes/main/samples/todo-app/deployment.yaml -n todo-app
     - name: Test service URLs
       run: |
-        echo "------------------opening the service------------------"
-        url=kubectl get svc -n todo-app --output json | jq '.items[] | select(.metadata.name == "frontend")'.status.loadBalancer.ingress[0]
-        curl --location $url | grep -Eo '[0-9.]{7,14}'       
+        echo "------------------opening the frontend service------------------"
+        curl --location $(kubectl get svc -n todo-app --output json | jq '.items[] | select(.metadata.name == "frontend")'.status.loadBalancer.ingress[0].ip)
