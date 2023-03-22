@@ -25,6 +25,5 @@ jobs:
     - name: Test service URLs
       run: |
         kubectl get services -n todo-app --output json > services.json
-        cat services.json
         echo "printing jq filter value" 
-        jq '.items[] | select(.metadata.name == "frontend")'     
+        jq '.items[] | select(.metadata.name == "frontend")' services.json   
