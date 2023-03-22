@@ -36,6 +36,7 @@ jobs:
     #     curl -m 3 $url:80
     #     kill $tunnelPID
     - name: Install and Run B2K
+      timeout-minutes: 10
       run: |
           echo "installing B2K"
           curl -fsSL https://raw.githubusercontent.com/Azure/Bridge-To-Kubernetes/main/scripts/install.sh | bash
@@ -43,6 +44,9 @@ jobs:
           dsc connect --help
           echo "starting B2K..."
           dsc connect --service stats-api --namespace todo-app --local-port 3001 --control-port 51424 --use-kubernetes-service-environment-variables > /dev/null & b2kPID=$!
+          echo "b2kPID: $b2kPID"
+          ps ax | grep "$b2kPID"
+          echo "sleeping for 60 seconds..."
           sleep 60
           echo "start local stats-api project"
           cd samples/todo-app/stats-api
