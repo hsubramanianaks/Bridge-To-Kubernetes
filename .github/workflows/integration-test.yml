@@ -26,4 +26,4 @@ jobs:
       run: |
         kubectl get services -n todo-app --output json > services.json
         echo "printing jq filter value" 
-        jq '.items[] | select(.metadata.name == "frontend")' services.json   
+        jq '.items[] | select(.metadata.name == "frontend").status.loadBalancer.ingress[0].ip' services.json   
