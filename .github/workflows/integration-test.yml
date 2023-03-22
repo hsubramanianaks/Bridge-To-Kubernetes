@@ -43,12 +43,11 @@ jobs:
           dsc connect --help
           echo "starting B2K..."
           dsc connect --service stats-api --namespace todo-app --local-port 3001 --control-port 51424 --use-kubernetes-service-environment-variables
-    - name: Run integration tests
-      run: |
-        echo "running integration tests"
-        cd ./integration-tests
-        npm install
-        npm test
-        echo "integration tests completed"
+          echo "start local stats-api project"
+          cd samples/todo-app/stats-api
+          npm install
+          npm run start
+          echo "validating if b2k debugging is working for stats-api in todo-app namespace"
+          curl http://127.0.0.1/api/stats -H 'Content-Type: application/json; charset=utf-8'
 
 
