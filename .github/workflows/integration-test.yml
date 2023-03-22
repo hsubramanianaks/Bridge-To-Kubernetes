@@ -58,7 +58,7 @@ jobs:
       shell: bash
       run: |
           echo "start local stats-api project"
-          ps aux | grep "$b2kPID"
+          ps aux | grep "${{ steps.install_b2k.outputs.b2kPID }}"
           echo "validating if b2k debugging is working for stats-api in todo-app namespace"
           curl http://127.0.0.1/api/stats -H 'Content-Type: application/json; charset=utf-8'
           echo "b2kPID from previous step is: ${{ steps.install_b2k.outputs.b2kPID }}"
