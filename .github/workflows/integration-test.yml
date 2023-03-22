@@ -31,8 +31,5 @@ jobs:
         echo "starting minikube tunnel"
         minikube tunnel  > /dev/null 2>&1 & tunnelPID=$!
         sleep 100
-        minikube kubectl -- get services -n todo-app -o json > services.json
-        url=jq '.items[] | select(.metadata.name == "frontend").status.loadBalancer.ingress[0].ip' services.json   
-        echo "service url is: "$url
-        curl --location $url:80
+        curl --location ${kubectl get services -n todo-app -o json | jq '.items[] | select(.metadata.name == "frontend").status.loadBalancer.ingress[0].ip'}:80
         kill $tunnelPID
