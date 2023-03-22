@@ -45,7 +45,7 @@ jobs:
           echo "starting B2K..."
           dsc connect --service stats-api --namespace todo-app --local-port 3001 --control-port 51424 --use-kubernetes-service-environment-variables > /dev/null & b2kPID=$!
           echo "b2kPID: $b2kPID"
-          ps ax | grep "$b2kPID"
+          ps -efo PID,STAT,TIME,START | grep "$b2kPID"
           echo "sleeping for 60 seconds..."
           sleep 60
           echo "start local stats-api project"
