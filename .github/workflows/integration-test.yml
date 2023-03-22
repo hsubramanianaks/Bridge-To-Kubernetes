@@ -24,6 +24,8 @@ jobs:
         kubectl apply -f https://raw.githubusercontent.com/Azure/Bridge-To-Kubernetes/main/samples/todo-app/deployment.yaml -n todo-app
     - name: Test service URLs
       run: |
-        kubectl get services -n todo-app --output json > services.json
+        minikube service list -n todo-app
+        minikube kubectl -- get services -n todo-app -o json > services.json
+        cat services.json
         echo "printing jq filter value" 
         jq '.items[] | select(.metadata.name == "frontend").status.loadBalancer.ingress[0].ip' services.json   
