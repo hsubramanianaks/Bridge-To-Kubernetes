@@ -26,13 +26,13 @@ jobs:
       run: |
         kubectl wait --for=condition=ready pod --all -n todo-app --timeout=300s
         kubectl get pods -n todo-app
-    - name: Run minikube tunnel
-      run: minikube tunnel
     - name: Test service URLs
       run: |
-        minikube service list -n todo-app
+        echo "starting minikube tunnel"
+        minikube tunnel  > /dev/null 2>&1 & tunnelPID=$!
+        sleep 100
         minikube kubectl -- get services -n todo-app -o json > services.json
-        cat services.json
-        echo "printing jq filter value" 
         url=jq '.items[] | select(.metadata.name == "frontend").status.loadBalancer.ingress[0].ip' services.json   
-        curl --location $url
+        echo "service url is: "$url
+        curl --location $url:80
+        kill $tunnelPID
