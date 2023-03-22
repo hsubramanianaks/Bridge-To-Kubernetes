@@ -51,14 +51,14 @@ jobs:
           echo "b2kPID=$b2kPID" >> $GITHUB_OUTPUT
           echo "sleeping for 60 seconds..."
           sleep 60
+          kubectl get pod -n todo-app -o json | jq '.items[] | select(.metadata.name | contains("restore"))'
+          kubectl get pod -n todo-app
     - name: Run local stats-api app
       timeout-minutes: 5
       shell: bash
       run: |
           echo "start local stats-api project"
-          cd samples/todo-app/stats-api
-          npm install
-          npm run start
+          ps aux | grep "$b2kPID"
           echo "validating if b2k debugging is working for stats-api in todo-app namespace"
           curl http://127.0.0.1/api/stats -H 'Content-Type: application/json; charset=utf-8'
           echo "b2kPID from previous step is: ${{ steps.install_b2k.outputs.b2kPID }}"
