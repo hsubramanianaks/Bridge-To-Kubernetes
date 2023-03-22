@@ -26,12 +26,29 @@ jobs:
       run: |
         kubectl wait --for=condition=ready pod --all -n todo-app --timeout=300s
         kubectl get pods -n todo-app
-    - name: Test service URLs
+    # - name: Test service URLs
+    #   run: |
+    #     echo "starting minikube tunnel"
+    #     minikube tunnel  > /dev/null 2>&1 & tunnelPID=$!
+    #     sleep 60
+    #     url=$(kubectl get services -n todo-app -o json | jq '.items[] | select(.metadata.name == "frontend").status.loadBalancer.ingress[0].ip')
+    #     echo "service url is: $url"
+    #     curl -m 3 $url:80
+    #     kill $tunnelPID
+    - name: Install and Run B2K
       run: |
-        echo "starting minikube tunnel"
-        minikube tunnel  > /dev/null 2>&1 & tunnelPID=$!
-        sleep 60
-        url=$(kubectl get services -n todo-app -o json | jq '.items[] | select(.metadata.name == "frontend").status.loadBalancer.ingress[0].ip')
-        echo "service url is: $url"
-        curl -m 3 $url:80
-        kill $tunnelPID
+          echo "installing B2K"
+          curl -fsSL https://raw.githubusercontent.com/Azure/Bridge-To-Kubernetes/main/scripts/install.sh | bash
+          echo "validate B2K"
+          dsc connect --help
+          echo "starting B2K"
+          dsc connect --service stats-api --namespace todo-app --local-port 3001 --control-port 51424
+    - name: Run integration tests
+      run: |
+        echo "running integration tests"
+        cd ./integration-tests
+        npm install
+        npm test
+        echo "integration tests completed"
+
+
