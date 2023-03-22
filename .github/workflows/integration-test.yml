@@ -22,10 +22,17 @@ jobs:
     - name: Deploy todo-app
       run:
         kubectl apply -f https://raw.githubusercontent.com/Azure/Bridge-To-Kubernetes/main/samples/todo-app/deployment.yaml -n todo-app
+    - name: Wait for pods to be ready
+      run: |
+        kubectl wait --for=condition=ready pod --all -n todo-app --timeout=300s
+        kubectl get pods -n todo-app
+    - name: Run minikube tunnel
+      run: minikube tunnel
     - name: Test service URLs
       run: |
         minikube service list -n todo-app
         minikube kubectl -- get services -n todo-app -o json > services.json
         cat services.json
         echo "printing jq filter value" 
-        jq '.items[] | select(.metadata.name == "frontend").status.loadBalancer.ingress[0].ip' services.json   
+        url=jq '.items[] | select(.metadata.name == "frontend").status.loadBalancer.ingress[0].ip' services.json   
+        curl --location $url
