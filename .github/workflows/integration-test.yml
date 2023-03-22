@@ -42,12 +42,22 @@ jobs:
           echo "validating B2K"
           dsc connect --help
           echo "starting B2K..."
-          dsc connect --service stats-api --namespace todo-app --local-port 3001 --control-port 51424 --use-kubernetes-service-environment-variables
+          dsc connect --service stats-api --namespace todo-app --local-port 3001 --control-port 51424 --use-kubernetes-service-environment-variables > /dev/null 2>&1 & b2kPID=$!
           echo "start local stats-api project"
           cd samples/todo-app/stats-api
           npm install
           npm run start
           echo "validating if b2k debugging is working for stats-api in todo-app namespace"
           curl http://127.0.0.1/api/stats -H 'Content-Type: application/json; charset=utf-8'
+          kill $b2kPID
+          echo "validating if b2k is disconnected successfully"
+          restorepodexists=kubectl get pod -n todo -o json | jq '.items[] | select(.metadata.name | contains("restore"))'
+          if [ -z "$restorepodexists" ]; then
+            echo "restore pod does not exist"
+            exit 0
+          else
+            echo "restore pod exists"
+            exit 1
+          fi
 
 
