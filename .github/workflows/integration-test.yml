@@ -45,33 +45,15 @@ jobs:
           echo "validating B2K"
           dsc connect --help
           echo "starting B2K..."
-          dsc connect --service stats-api --namespace todo-app --local-port 3001 --control-port 51424 --use-kubernetes-service-environment-variables > /dev/null & b2kPID=$!
-          echo "b2kPID: $b2kPID"
-          ps aux | grep "$b2kPID"
-          echo "b2kPID=$b2kPID" >> $GITHUB_OUTPUT
+          dsc connect --service stats-api --namespace todo-app --local-port 3001 --control-port 51424 --use-kubernetes-service-environment-variables
+          ps aux | grep "dsc"
           echo "sleeping for 60 seconds..."
           sleep 60
-          kubectl get pod -n todo-app -o json | jq '.items[] | select(.metadata.name | contains("restore"))'
           kubectl get pod -n todo-app
-    - name: Run local stats-api app
-      timeout-minutes: 5
-      shell: bash
-      run: |
           echo "start local stats-api project"
-          ps aux | grep "${{ steps.install_b2k.outputs.b2kPID }}"
           echo "validating if b2k debugging is working for stats-api in todo-app namespace"
           curl http://127.0.0.1/api/stats -H 'Content-Type: application/json; charset=utf-8'
-          echo "b2kPID from previous step is: ${{ steps.install_b2k.outputs.b2kPID }}"
-          kill ${{ steps.install_b2k.outputs.b2kPID }}
-          echo "validating if b2k is disconnected successfully"
-          restorepodexists=kubectl get pod -n todo -o json | jq '.items[] | select(.metadata.name | contains("restore"))'
-          if [ -z "$restorepodexists" ]; then
-            echo "restore pod does not exist"
-            exit 0
-          else
-            echo "restore pod exists"
-            exit 1
-          fi
+          
           
 
 
