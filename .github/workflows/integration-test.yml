@@ -10,20 +10,21 @@ jobs:
       uses: medyagh/setup-minikube@master
     - name: Try the cluster !
       run: kubectl get pods -A
-    # - name: Build image
-    #  run: |
-    #   export SHELL=/bin/bash
-    #   eval $(minikube -p minikube docker-env)
-    #   docker build -f ./Dockerfile -t local/example .
-    #    echo -n "verifying images:"
-    #   docker images 
     - name: create todo-app namespace
       run: kubectl create namespace todo-app
     - name: Deploy todo-app
       run:
         kubectl apply -f https://raw.githubusercontent.com/Azure/Bridge-To-Kubernetes/main/samples/todo-app/deployment.yaml -n todo-app
-    - name: Test service URLs
+    - name: Wait for pods to be ready
       run: |
-        echo "------------------opening the service------------------"
-        url=kubectl get svc -n todo-app --output json | jq '.items[] | select(.metadata.name == "frontend")'.status.loadBalancer.ingress[0]
-        curl --location $url | grep -Eo '[0-9.]{7,14}'       
+        kubectl wait --for=condition=ready pod --all -n todo-app --timeout=300s
+        kubectl get pods -n todo-app
+    - name: Publish and test
+      timeout-minutes: 5
+      shell: bash
+      run: |
+        dotnet publish src/dsc/dsc.csproj -c Debug -r linux-x64 --self-contained true 
+        dotnet publish src/endpointmanager/endpointmanager.csproj -c Debug -r linux-x64
+        dotnet test src/integration.tests/integration.tests.csproj
+          
+
