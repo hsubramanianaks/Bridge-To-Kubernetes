@@ -120,15 +120,15 @@ spec:
           periodSeconds: 5
     volumes:
       - name: config
-    configMap:
+        configMap:
       # Provide the name of the ConfigMap you want to mount.
-      name: game-demo
+          name: config-map
       # An array of keys from the ConfigMap to create as files
-      items:
-      - key: "game.properties"
-        path: "game.properties"
-      - key: "user-interface.properties"
-        path: "user-interface.properties"
+          items:
+            - key: "game.properties"
+              path: "game.properties"
+            - key: "user-interface.properties"
+              path: "user-interface.properties"
 ---
 apiVersion: v1
 kind: Service
