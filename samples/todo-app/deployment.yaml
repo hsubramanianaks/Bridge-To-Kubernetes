@@ -122,11 +122,6 @@ spec:
         - name: config
           configMap:
           name: config-map
-          items:
-            - key: "game.properties"
-              path: "game.properties"
-            - key: "user-interface.properties"
-              path: "user-interface.properties"
 ---
 apiVersion: v1
 kind: Service
