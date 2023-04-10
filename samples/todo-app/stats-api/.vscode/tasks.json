@@ -11,7 +11,7 @@
             ],
             "targetCluster": "minikube",
             "targetNamespace": "todo-app",
-            "useKubernetesServiceEnvironmentVariables": false
+            "useKubernetesServiceEnvironmentVariables": true
         }
     ]
 }

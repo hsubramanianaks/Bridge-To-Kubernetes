@@ -3,6 +3,6 @@ env:
     - name: FOO
       value: stats-api-testing
     - name: STATS_API_VOLUME_PATH
-      value: $(volumeMounts:kube-api-access-s5slv)
+      value: $(volumeMounts:kube-api-*)
     - name: STATS_API_CONFIG_PATH
       value: $(volumeMounts:config)
