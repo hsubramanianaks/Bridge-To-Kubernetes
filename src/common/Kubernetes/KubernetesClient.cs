@@ -1010,13 +1010,12 @@ namespace Microsoft.BridgeToKubernetes.Common.Kubernetes
 
             var gotEnvSuccessfully = await WebUtilities.RetryUntilTimeWithWaitAsync(async (i) =>
             {
-                var exitCode = this.RunShortRunningCommand(
+                var exitCode = await this.InvokeShortRunningKubectlCommandAsync(
                     KubernetesCommandName.GetContainerEnvironment,
                     $"exec {podName} -c {containerName} -n {namespaceName} -- env",
                     onStdOut: outputHandler,
                     onStdErr: (string error) => errorSb.Append(error),
-                    cancellationToken,
-                    timeoutMs: (int)TimeSpan.FromSeconds(10).TotalMilliseconds);
+                    cancellationToken: cancellationToken);
 
                 if (exitCode == 0)
                 {
