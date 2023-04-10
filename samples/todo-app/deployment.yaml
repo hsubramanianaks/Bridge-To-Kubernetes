@@ -118,17 +118,17 @@ spec:
             port: 80
           initialDelaySeconds: 15
           periodSeconds: 5
-    volumes:
-      - name: config
-        configMap:
+        volumes:
+          - name: config
+            configMap:
       # Provide the name of the ConfigMap you want to mount.
-          name: config-map
+            name: config-map
       # An array of keys from the ConfigMap to create as files
-          items:
-            - key: "game.properties"
-              path: "game.properties"
-            - key: "user-interface.properties"
-              path: "user-interface.properties"
+            items:
+              - key: "game.properties"
+                path: "game.properties"
+              - key: "user-interface.properties"
+                path: "user-interface.properties"
 ---
 apiVersion: v1
 kind: Service
