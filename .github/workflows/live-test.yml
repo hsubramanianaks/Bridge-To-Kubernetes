@@ -25,8 +25,7 @@ jobs:
         brew install docker-machine
         #Install VirualBox
         brew install --cask virtualbox
-        #start docker daemon
-        dockerd
+        docker run hello-world
     - name: Start minikube
       uses: medyagh/setup-minikube@master
       with:
