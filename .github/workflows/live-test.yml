@@ -20,7 +20,11 @@ jobs:
        version: latest
     - name: Setup docker for macos-latest
       if: ${{ matrix.os == 'macos-latest' }}
-      run: brew install docker
+      run: |
+        brew install homebrew/cask/docker
+        #start docker daemon
+        dockerd
+
     - name: Start minikube
       uses: medyagh/setup-minikube@master
       with:
