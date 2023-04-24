@@ -24,7 +24,7 @@ jobs:
         brew install --cask docker virtualbox 
         brew install docker-machine
         docker-machine create --driver virtualbox default
-        docker-machine restart
+        docker-machine start default
         docker run hello-world
     - name: Start minikube
       uses: medyagh/setup-minikube@c8adc427cd854219da7bdea2f5fce5d23c89512a
