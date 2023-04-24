@@ -20,12 +20,8 @@ jobs:
        version: latest
     - name: Setup docker for macos-latest
       if: ${{ matrix.os == 'macos-latest' }}
-      run: |
-        brew install docker
-        sudo brew install docker-machine
-        sudo docker-machine create --driver virtualbox default
-        docker-machine start default
-        docker run hello-world
+      uses: docker-practice/actions-setup-docker@master
+      timeout-minutes: 12
     - name: Start minikube
       uses: medyagh/setup-minikube@c8adc427cd854219da7bdea2f5fce5d23c89512a
       with:
