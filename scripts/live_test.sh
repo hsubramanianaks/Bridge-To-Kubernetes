@@ -72,7 +72,7 @@ start_b2k() {
 
 start_minikube_tunnel() {
     echo 'Starting minikube tunnel'
-    minikube tunnel  > /dev/null 2>&1 & tunnelPID=$!
+    minikube tunnel & tunnelPID=$!
     sleep 10
     echo 'verifying if minikube tunnel works'
     curl $(minikube service frontend -n todo-app --url)/api/stats
