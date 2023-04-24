@@ -21,6 +21,7 @@ jobs:
     - name: Setup docker for macos-latest
       if: ${{ matrix.os == 'macos-latest' }}
       run: |
+        brew install docker
         brew install --cask docker virtualbox 
         brew install docker-machine
         docker-machine create --driver virtualbox default
