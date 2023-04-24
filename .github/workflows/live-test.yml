@@ -35,8 +35,8 @@ jobs:
         kubectl apply -f ./samples/todo-app/deployment.yaml -n todo-app
     - name: Wait for pods to be ready
       run: |
-        kubectl wait --for=condition=ready pod --all -n todo-app --timeout=300s
         kubectl get pods -n todo-app
+        kubectl wait --for=condition=ready pod --all -n todo-app --timeout=300s
     - name: Publish and test
       timeout-minutes: 10
       shell: bash
