@@ -34,7 +34,7 @@ verify_if_multiple_pods_exists() {
         STATS_API=$(kubectl get pods -n todo-app | grep "stats-api")
         echo "stats api pods: $STATS_API"
         echo "stats api length: ${#STATS_API}"
-        if [ ! -z "$STATS_API" ] && [ "${#STATS_API}" -gt 75 ]; then 
+        if [ ! -z "$STATS_API" ] && [ "${#STATS_API}" -gt 100 ]; then 
             MULTIPLE_POD_EXISTS=true
             echo "retry count is $count"
             echo "multiple stats-api pod exists, sleeping for 5 seconds to retry"
