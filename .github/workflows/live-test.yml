@@ -43,13 +43,15 @@ jobs:
        if [ "$RUNNER_OS" == "Linux" ]; then
         chmod +x scripts/live_test.sh
         RUN_TIME=linux-x64
+        ./scripts/live_test.sh $RUN_TIME
        elif [ "$RUNNER_OS" == "Windows" ]; then
         RUN_TIME=win-x64
+        ./scripts/live_test.sh $RUN_TIME
        else
-        chmod +x scripts/live_test.sh
+        chmod +x scripts/live_test_macos.sh
         RUN_TIME=osx-x64
+        ./scripts/live_test_macos.sh $RUN_TIME
        fi
-       ./scripts/live_test.sh $RUN_TIME
     - name: verify if B2K disconnected successfully
       shell: bash
       run: |
