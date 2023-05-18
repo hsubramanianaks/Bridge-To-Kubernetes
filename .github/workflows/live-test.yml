@@ -15,9 +15,12 @@ jobs:
     - uses: actions/checkout@v2
     - name: Start docker for windows
       if: ${{ matrix.os == 'windows-latest' }}
-      run: |
-        cd C:\Program Files\Docker\Docker\resources
-        dockerd.exe --experimental
+      uses: Azure/powershell@v1
+      with:
+        inlineScript: |
+          Write-Output "Starting docker for windows"
+          Start-Process 'C:\Program Files\Docker\Docker\Docker Desktop.exe'
+          Write-Output "Docker for windows started"
     - name: Setup kubectl for macos-latest
       if: ${{ matrix.os == 'macos-latest' }}
       uses: azure/setup-kubectl@v3
