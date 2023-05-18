@@ -15,8 +15,11 @@ jobs:
     - uses: actions/checkout@v2
     - name: Enable hyperv for windows
       if: ${{ matrix.os == 'windows-latest' }}
-      run: |
-        Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
+      uses: Azure/powershell@v1
+      with:
+        inlineScript: |
+          Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
+        azPSVersion: '3.1.0'
     - name: Start minikube for windows 
       if: ${{ matrix.os == 'windows-latest' }}
       uses: medyagh/setup-minikube@c8adc427cd854219da7bdea2f5fce5d23c89512a
