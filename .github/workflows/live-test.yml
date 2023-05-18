@@ -21,7 +21,7 @@ jobs:
       if: ${{ matrix.os == 'windows-latest' }}
       uses: medyagh/setup-minikube@c8adc427cd854219da7bdea2f5fce5d23c89512a
       with:
-       driver: hyperkit
+       driver: hyperv
     - name: Start minikube for ubuntu 
       if: ${{ matrix.os == 'ubuntu-latest' }}
       uses: medyagh/setup-minikube@c8adc427cd854219da7bdea2f5fce5d23c89512a
