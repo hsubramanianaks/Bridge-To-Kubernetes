@@ -21,6 +21,7 @@ jobs:
           Write-Output "Starting docker for windows"
           Start-Process 'C:\Program Files\Docker\Docker\Docker Desktop.exe'
           Write-Output "Docker for windows started"
+        azPSVersion: '3.1.0'
     - name: Setup kubectl for macos-latest
       if: ${{ matrix.os == 'macos-latest' }}
       uses: azure/setup-kubectl@v3
