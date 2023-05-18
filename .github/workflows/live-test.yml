@@ -19,7 +19,7 @@ jobs:
       with:
         inlineScript: |
           Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
-          Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V-Tools-All -Al
+          Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V-Tools-All -All
         azPSVersion: '3.1.0'
     - name: Start minikube for windows 
       if: ${{ matrix.os == 'windows-latest' }}
