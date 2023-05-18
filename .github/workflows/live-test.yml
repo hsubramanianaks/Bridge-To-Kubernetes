@@ -20,7 +20,7 @@ jobs:
         inlineScript: |
           Write-Output "Starting docker for windows"
           cd 'C:\Program Files\Docker\Docker'
-          Start-Process 'C:\Program Files\Docker\Docker\Docker Desktop.exe'
+          Start-Process 'Docker Desktop.exe'
           Write-Output "Docker for windows started"
         azPSVersion: '3.1.0'
     - name: Setup kubectl for macos-latest
