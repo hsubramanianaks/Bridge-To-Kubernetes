@@ -13,10 +13,6 @@ jobs:
     name: live test for b2k
     steps:
     - uses: actions/checkout@v2
-    - name: Start docker for windows
-      if: ${{ matrix.os == 'windows-latest' }}
-      run: |
-        start "C:\Program Files\Docker\Docker\Docker Desktop.exe"
     - name: Setup kubectl for macos-latest
       if: ${{ matrix.os == 'macos-latest' }}
       uses: azure/setup-kubectl@v3
