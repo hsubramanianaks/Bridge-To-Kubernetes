@@ -13,6 +13,10 @@ jobs:
     name: live test for b2k
     steps:
     - uses: actions/checkout@v2
+    - name: Enable hyperv for windows
+      if: ${{ matrix.os == 'windows-latest' }}
+      run: |
+        Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
     - name: Start minikube for windows 
       if: ${{ matrix.os == 'windows-latest' }}
       uses: medyagh/setup-minikube@c8adc427cd854219da7bdea2f5fce5d23c89512a
