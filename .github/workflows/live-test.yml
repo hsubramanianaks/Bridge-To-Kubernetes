@@ -8,17 +8,25 @@ jobs:
   liveTest:
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     name: live test for b2k
     steps:
     - uses: actions/checkout@v2
-    - name: Setup kubectl for macos-latest
-      if: ${{ matrix.os == 'macos-latest' }}
-      uses: azure/setup-kubectl@v3
+    - name: Enable hyperv for windows
+      if: ${{ matrix.os == 'windows-latest' }}
+      uses: Azure/powershell@v1
       with:
-       version: latest
-    - name: Start minikube
+        inlineScript: |
+          Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
+        azPSVersion: '3.1.0'
+    - name: Start minikube for windows 
+      if: ${{ matrix.os == 'windows-latest' }}
+      uses: medyagh/setup-minikube@c8adc427cd854219da7bdea2f5fce5d23c89512a
+      with:
+       driver: virtualbox
+    - name: Start minikube for ubuntu 
+      if: ${{ matrix.os == 'ubuntu-latest' }}
       uses: medyagh/setup-minikube@c8adc427cd854219da7bdea2f5fce5d23c89512a
       with:
        driver: docker
