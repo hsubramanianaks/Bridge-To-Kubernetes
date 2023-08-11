@@ -41,11 +41,11 @@ namespace Microsoft.BridgeToKubernetes.Exe.Tests
             int result = _cliApp.Execute(new string[] { "invalid" }, new CancellationToken());
             Assert.Equal(1, result);
         }
-/*
-        [Fact]
+
+        /*[Fact]
         public void shouldPassIfValidArgumentsPassed()
         {
-           
+
             int result = _cliApp.Execute(commands, new CancellationToken());
             Assert.Equal(0, result);
         }*/
