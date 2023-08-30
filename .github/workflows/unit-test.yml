@@ -16,8 +16,8 @@ jobs:
         run: dotnet restore ./src/unittest.sln
       - name: Run tests
         run: |
-          dotnet test .\src\dsc.tests\dsc.tests.csproj /p:CollectCoverage=true /p:CoverletOutput=../CoverageResults/ /p:MergeWith="../CoverageResults/coverage.json" /p:Exclude=[dsc*]Microsoft.BridgeToKubernetes.Remoting.*
-          dotnet test .\src\routingmanager.tests\routingmanager.tests.csproj /p:CollectCoverage=true /p:CoverletOutput=../CoverageResults/ /p:MergeWith="../CoverageResults/coverage.json" --filter FullyQualifiedName~Microsoft.BridgeToKubernetes.RoutingManager.Tests
+          dotnet test .\src\dsc.tests\dsc.tests.csproj /p:CollectCoverage=true /p:CoverletOutput=../CoverageResults/ /p:MergeWith="../CoverageResults/coverage.json" /p:ExcludeByFile=\"/src/dsc.tests/**"\
+          dotnet test .\src\routingmanager.tests\routingmanager.tests.csproj /p:CollectCoverage=true /p:CoverletOutput=../CoverageResults/ /p:MergeWith="../CoverageResults/coverage.json"
           dotnet test .\src\devhostAgent.restorationjob.tests\devhostAgent.restorationjob.tests.csproj /p:CollectCoverage=true /p:CoverletOutput=../CoverageResults/ /p:MergeWith="../CoverageResults/coverage.json"
           dotnet test .\src\library.tests\library.tests.csproj /p:CollectCoverage=true /p:CoverletOutput=../CoverageResults/ /p:MergeWith="../CoverageResults/coverage.json"
           dotnet test .\src\common.tests\common.tests.csproj /p:CollectCoverage=true /p:CoverletOutput=../CoverageResults/ /p:MergeWith="../CoverageResults/coverage.json"
