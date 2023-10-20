@@ -187,6 +187,87 @@ namespace Microsoft.BridgeToKubernetes.Common.Tests.Kubernetes
             A.CallTo(listNamespacedServiceExpression).MustNotHaveHappened();
         }
 
+        /*[Fact]
+        public async Task ListDeploymentsInNamespaceAsync()
+        {
+            Expression<Func<Task<HttpOperationResponse<V1DeploymentList>>>> listDeploymentsInNamespaceAsync =
+                                                                                () => _fakeRestClient.AppsV1.ListNamespacedDeploymentWithHttpMessagesAsync(A<string>._, A<bool?>._, A<string>._, A<string>._,
+                                                                                A<string>._, A<int>._, A<string>._, A<string>._, A<bool?>._, A<int>._, A<bool?>._, A<bool?>._,
+                                                                                A<IReadOnlyDictionary<string, IReadOnlyList<String>>>._, A<CancellationToken>._);
+
+            Expression<Func<Task<HttpOperationResponse<V1DeploymentList>>>> listDeploymentsAllNamespaceAsync =
+                                                                                () => _fakeRestClient.AppsV1.ListDeploymentForAllNamespacesWithHttpMessagesAsync( A<bool?>._, A<string>._, A<string>._,
+                                                                                A<string>._, A<int>._, A<bool?>._, A<string>._, A<string>._, A<bool?>._, A<int?>._, A<bool?>._,
+                                                                                A<IReadOnlyDictionary<string, IReadOnlyList<String>>>._, A<CancellationToken>._);
+
+            A.CallTo(listDeploymentsAllNamespaceAsync).Throws<IOException>()
+                .Once()
+                .Then
+                .Throws(new HttpRequestException(string.Empty, new IOException()))
+                .Once()
+                .Then
+                .Returns(new HttpOperationResponse<V1DeploymentList>()
+            {
+                Body = new V1DeploymentList()
+            });
+            var deploymentList = await _kClient.ListDeploymentsInNamespaceAsync(null, new CancellationToken());
+            Assert.Empty(deploymentList.Items);
+            A.CallTo(listDeploymentsInNamespaceAsync).MustHaveHappened();
+        }*/
+
+        [Fact]
+        public async Task GetV1ServiceAsync()
+        {
+            Expression<Func<Task<HttpOperationResponse<V1Service>>>> readNamespacedServiceWithHttpMessagesAsync =
+                                                                                () => _fakeRestClient.CoreV1.ReadNamespacedServiceWithHttpMessagesAsync(
+                                                                                                                        A<string>._, A<string>._, A<bool?>._, A<IReadOnlyDictionary<string, IReadOnlyList<String>>>._,
+                                                                                                                        A<CancellationToken>._);
+            A.CallTo(readNamespacedServiceWithHttpMessagesAsync)
+                .Throws<IOException>()
+                .Once()
+                .Then
+                .Throws(new HttpRequestException(string.Empty, new IOException()))
+                .Once()
+                .Then
+                .Returns(new HttpOperationResponse<V1Service>()
+                {
+                    Body = new V1Service()
+                });
+            var result = await _kClient.GetV1ServiceAsync(null, null, new CancellationToken());
+            Assert.NotNull(result);
+            A.CallTo(readNamespacedServiceWithHttpMessagesAsync).MustHaveHappenedANumberOfTimesMatching(n => n == 3);
+
+        }
+
+        /*[Fact]
+        public async Task CreateOrReplaceV1ServiceAsync()
+        {
+            Expression<Func<Task<HttpOperationResponse<V1Service>>>> CreateNamespacedServiceWithHttpMessagesAsync =
+                                                                                () => _fakeRestClient.CoreV1.CreateNamespacedServiceWithHttpMessagesAsync(A<V1Service>._,A<string>._,null,null,n);
+
+            Expression<Func<Task<HttpOperationResponse<V1Service>>>> DeleteNamespacedServiceWithHttpMessagesAsync =
+                                                                                () => _fakeRestClient.CoreV1.DeleteNamespacedServiceWithHttpMessagesAsync(
+                                                                                                                        A<string>._, A<string>._, A<V1DeleteOptions>._, A<string>._, A<int?>._,
+                                                                                                                        A<bool?>._,
+                                                                                                                        A<string>._,
+                                                                                                                         A<bool?>._,
+                                                                                                                        A<IReadOnlyDictionary<string, IReadOnlyList<String>>>._,
+                                                                                                                        A<CancellationToken>._);
+
+            A.CallTo(CreateNamespacedServiceWithHttpMessagesAsync)
+                .Throws(new HttpOperationException("Conflict", new Exception()))
+                .Once()
+                .Then
+                .Throws(new HttpOperationException("Conflict", new Exception()))
+                .Once()
+                .Then
+                .Throws(new HttpOperationException("Conflict", new Exception()))
+
+            var result = await _kClient.CreateOrReplaceV1ServiceAsync("test", new V1Service(), new CancellationToken());
+            Assert.NotNull(result);
+            A.CallTo(CreateNamespacedServiceWithHttpMessagesAsync).MustHaveHappenedANumberOfTimesMatching(n => n == 3);
+        }*/
+
         private V1PodStatus GetPodStatus(string userContainerStatus, string initContainerStatus)
         {
             IList<V1ContainerStatus> userContainerStatuses = new List<V1ContainerStatus>() { GetV1ContainerStatus("userContainer", userContainerStatus) };
