@@ -161,20 +161,23 @@ strategy:
         vmImage: 'macos-13-arm64'
 
 
-      steps:
-        - template: templates/build.yml
-          parameters:
-            TelemetryType: ${{ matrix.TelemetryType }}
-            BuildConfiguration: ${{ matrix.BuildConfiguration }}
-            BuildPlatform: ${{ matrix.BuildPlatform }}
-            SelfContained: ${{ matrix.SelfContained }}
-            KubectlDownloadUrl: ${{ matrix.KubectlDownloadUrl }}
-            KubectlPath: ${{ matrix.KubectlPath }}
-            KubectlFileName: ${{ matrix.KubectlFileName }}
-            ZipFilePathName: ${{ matrix.ZipFilePathName }}
-            ZipFileName: ${{ matrix.ZipFileName }}
-            poolName: ${{ matrix.poolName }}
-            vmImage: ${{ matrix.vmImage }}
-
-        - template: templates/generate-lks.yml
-          condition: and(succeeded())
+jobs:
+- job: Build
+  steps:
+  - template: templates/build.yml
+    parameters:
+      TelemetryType: ${{ matrix.TelemetryType }}
+      BuildConfiguration: ${{ matrix.BuildConfiguration }}
+      BuildPlatform: ${{ matrix.BuildPlatform }}
+      SelfContained: ${{ matrix.SelfContained }}
+      KubectlDownloadUrl: ${{ matrix.KubectlDownloadUrl }}
+      KubectlPath: ${{ matrix.KubectlPath }}
+      KubectlFileName: ${{ matrix.KubectlFileName }}
+      ZipFilePathName: ${{ matrix.ZipFilePathName }}
+      ZipFileName: ${{ matrix.ZipFileName }}
+      poolName: ${{ matrix.poolName }}
+      vmImage: ${{ matrix.vmImage }}
+- job: lks.json
+  steps:
+  - template: templates/generate-lks.yml
+    condition: and(succeeded())
