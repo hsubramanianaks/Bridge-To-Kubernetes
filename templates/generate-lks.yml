@@ -1,7 +1,3 @@
-jobs:
- - job : 'Generate LKS.JSON' for all build platforms
-    pool:
-      vmImage: 'windows-latest'
 steps:
   - task: PowerShell@2
     displayName: Generate lks.json for .zip files
