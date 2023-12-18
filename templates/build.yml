@@ -330,7 +330,7 @@ steps:
       TargetPath: '\\my\share\$(Build.DefinitionName)\$(Build.BuildNumber)'
   - task: DotNetCoreCLI@2
     displayName: "dotnet pack CLI NuGet (Windows)"
-    condition: and(eq(parameters['SelfContained'], 'true') or(eq(parameters['BuildPlatform'], 'win-x64'), eq(parameters['BuildPlatform'], 'win-arm64')))
+    condition: and(eq(parameters['SelfContained'], 'true'), or(eq(parameters['BuildPlatform'], 'win-x64'), eq(parameters['BuildPlatform'], 'win-arm64')))
     inputs:
       command: pack
       feedsToUse: config
