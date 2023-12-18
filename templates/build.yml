@@ -76,11 +76,13 @@ parameters:
     default: 'VSEngSS-MicroBuild2022-1ES
     values:
     - 'VSEngSS-MicroBuild2022-1ES'
+    - ''
   - name: vmImage
     displayName: vmImage to be used
     default: 'macos-13-arm64'
     values:
     - 'macos-13-arm64'
+    - ''
 - name: BuildParameters.dotnetversion
   value: 7.0.x
 - name: BuildParameters.dotnetversionforbuild
