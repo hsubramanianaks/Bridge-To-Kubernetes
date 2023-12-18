@@ -73,7 +73,7 @@ parameters:
     - lpk-linux-arm64.zip
   - name: poolName
     displayName: poolName to be used
-    default: 'VSEngSS-MicroBuild2022-1ES
+    default: 'VSEngSS-MicroBuild2022-1ES'
     values:
     - 'VSEngSS-MicroBuild2022-1ES'
     - ''
