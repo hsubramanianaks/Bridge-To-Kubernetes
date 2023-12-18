@@ -27,16 +27,16 @@ strategy:
   matrix:
     self-contained:
       win-x64:
-        TelemetryType: ${{ parameters.TelemetryType }}
-        BuildConfiguration: ${{ parameters.BuildConfiguration }}
-        BuildPlatform: 'win-x64'
-        SelfContained: false
-        KubectlDownloadUrl: 'https://dl.k8s.io/release/v1.27.3/bin/windows/amd64/kubectl.exe'
-        KubectlPath: 'win'
-        KubectlFileName: 'kubectl.exe'
-        ZipFilePathName: 'win'
-        ZipFileName: 'lpk-win.zip'
-        poolName: 'VSEngSS-MicroBuild2022-1ES'
+          TelemetryType: ${{ parameters.TelemetryType }}
+          BuildConfiguration: ${{ parameters.BuildConfiguration }}
+          BuildPlatform: 'win-x64'
+          SelfContained: false
+          KubectlDownloadUrl: 'https://dl.k8s.io/release/v1.27.3/bin/windows/amd64/kubectl.exe'
+          KubectlPath: 'win'
+          KubectlFileName: 'kubectl.exe'
+          ZipFilePathName: 'win'
+          ZipFileName: 'lpk-win.zip'
+          poolName: 'VSEngSS-MicroBuild2022-1ES'
       win-arm64:
         TelemetryType: ${{ parameters.TelemetryType }}
         BuildConfiguration: ${{ parameters.BuildConfiguration }}
