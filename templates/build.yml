@@ -81,22 +81,28 @@ parameters:
     default: "macos-13-arm64"
     values:
       - "macos-13-arm64"
-
-variables:
   - name: BuildParameters.dotnetversion
-    value: 7.0.x
+    default: 7.0.x
+    values:
+      - 7.0.x
   - name: BuildParameters.dotnetversionforbuild
-    value: net7.0
+    default: net7.0
+    values:
+      - net7.0
   - name: BuildParameters.nugetversion
-    value: 5.9.x
+    default: 5.9.x
+    values:
+      - 5.9.x
   - name: TeamName
-    value: Mindaro
+    default: Mindaro
+    values:
+      - Mindaro
   - name: RunTests
-    value: True
+    default: True
+    values:
+      - True
+      - False
 
-jobs:
-  - job: Build for ${{ parameters.BuildPlatform }}
-    displayName: Build for ${{ parameters.BuildPlatform }}
     pool:
       ${{ if ne(parameters.poolName, '') }}:
         name: ${{ parameters.poolName }}
