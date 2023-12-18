@@ -1,426 +1,426 @@
 parameters:
   - name: TelemetryType
     displayName: Telemetry Type so that correct application insights key is selected
-    default: 'TELEMETRY_DEVELOPMENT'
+    default: "TELEMETRY_DEVELOPMENT"
     values:
-    - TELEMETRY_DEVELOPMENT
-    - TELEMETRY_STAGING
-    - TELEMETRY_PRODUCTION
+      - TELEMETRY_DEVELOPMENT
+      - TELEMETRY_STAGING
+      - TELEMETRY_PRODUCTION
   - name: BuildConfiguration
     displayName: BuildConfiguration to be used
-    default: 'Release'
+    default: "Release"
     values:
-    - Release
-    - Debug
+      - Release
+      - Debug
   - name: BuildPlatform
     displayName: BuildPlatform to be used
-    default: 'win-x64'
+    default: "win-x64"
     values:
-    - win-x64
-    - win-arm65
-    - linux-x64
-    - linux-arm64
-    - osx-x64
-    - osx-arm64
+      - win-x64
+      - win-arm65
+      - linux-x64
+      - linux-arm64
+      - osx-x64
+      - osx-arm64
   - name: SelfContained
     displayName: SelfContained to be used
-    default: 'true'
+    default: "true"
     values:
-    - true
-    - false
+      - true
+      - false
   - name: KubectlDownloadUrl
     displayName: KubectlDownloadUrl to be used
-    default: 'https://dl.k8s.io/release/v1.27.3/bin/windows/amd64/kubectl.exe'
+    default: "https://dl.k8s.io/release/v1.27.3/bin/windows/amd64/kubectl.exe"
     values:
-    - https://dl.k8s.io/release/v1.27.3/bin/windows/amd64/kubectl.exe
-    - https://dl.k8s.io/release/v1.27.3/bin/darwin/amd64/kubectl
-    - https://dl.k8s.io/release/v1.27.3/bin/linux/amd64/kubectl
-    - https://dl.k8s.io/release/v1.27.3/bin/windows/arm64/kubectl.exe
-    - https://dl.k8s.io/release/v1.27.3/bin/darwin/arm64/kubectl
-    - https://dl.k8s.io/release/v1.27.3/bin/linux/arm64/kubectl
+      - https://dl.k8s.io/release/v1.27.3/bin/windows/amd64/kubectl.exe
+      - https://dl.k8s.io/release/v1.27.3/bin/darwin/amd64/kubectl
+      - https://dl.k8s.io/release/v1.27.3/bin/linux/amd64/kubectl
+      - https://dl.k8s.io/release/v1.27.3/bin/windows/arm64/kubectl.exe
+      - https://dl.k8s.io/release/v1.27.3/bin/darwin/arm64/kubectl
+      - https://dl.k8s.io/release/v1.27.3/bin/linux/arm64/kubectl
   - name: KubectlPath
     displayName: KubectlPath to be used
     default: win
     values:
-    - win
-    - osx
-    - linux
+      - win
+      - osx
+      - linux
   - name: KubectlFileName
     displayName: KubectlFileName to be used
     default: kubectl.exe
     values:
-    - kubectl.exe
-    - kubectl
+      - kubectl.exe
+      - kubectl
   - name: ZipFilePathName
     displayName: ZipFilePathName to be used
     default: win
     values:
-    - win
-    - osx
-    - linux
-    - win-arm64
-    - osx-arm64
-    - linux-arm64
+      - win
+      - osx
+      - linux
+      - win-arm64
+      - osx-arm64
+      - linux-arm64
   - name: ZipFileName
     displayName: ZipFileName to be used
     default: lpk-win.zip
     values:
-    - lpk-win.zip
-    - lpk-osx.zip
-    - lpk-linux.zip
-    - lpk-win-arm64.zip
-    - lpk-osx-arm64.zip
-    - lpk-linux-arm64.zip
+      - lpk-win.zip
+      - lpk-osx.zip
+      - lpk-linux.zip
+      - lpk-win-arm64.zip
+      - lpk-osx-arm64.zip
+      - lpk-linux-arm64.zip
   - name: poolName
     displayName: poolName to be used
-    default: 'VSEngSS-MicroBuild2022-1ES'
+    default: "VSEngSS-MicroBuild2022-1ES"
     values:
-    - 'VSEngSS-MicroBuild2022-1ES'
+      - "VSEngSS-MicroBuild2022-1ES"
   - name: vmImage
     displayName: vmImage to be used
-    default: 'macos-13-arm64'
+    default: "macos-13-arm64"
     values:
-    - 'macos-13-arm64'
-- name: BuildParameters.dotnetversion
-  value: 7.0.x
-- name: BuildParameters.dotnetversionforbuild
-  value: net7.0
-- name: BuildParameters.nugetversion
-  value: 5.9.x
-- name: TeamName
-  value: Mindaro
-- name: RunTests
-  value: True
+      - "macos-13-arm64"
 
-
+variables:
+  - name: BuildParameters.dotnetversion
+    value: 7.0.x
+  - name: BuildParameters.dotnetversionforbuild
+    value: net7.0
+  - name: BuildParameters.nugetversion
+    value: 5.9.x
+  - name: TeamName
+    value: Mindaro
+  - name: RunTests
+    value: True
 
 jobs:
-- job: Build for ${{ parameters.BuildPlatform }}
-  displayName: Build for ${{ parameters.BuildPlatform }}
-  pool:
-    ${{ if ne(parameters.poolName, '') }}:
-      name: ${{ parameters.poolName }}
-      demands:
-      - msbuild
-      - visualstudio
-      - DotNetFramework
-    ${{ if ne(parameters.vmImage, '') }}:
-      vmImage: ${{ parameters.vmImage }}
-  steps:
-  - checkout: self
-    clean: true
-    fetchTags: false
-    persistCredentials: True
-  - task: PowerShell@2
-    displayName: Set staging/prod build vars for signing and telemetry copy
-    enabled: True
-    inputs:
-      targetType: inline
-      script: >-
-        if ($env:ForceStagingBuild -eq "true" -And $env:ForceProductionBuild -eq "true") {
-          Write-Host "You can't do a Staging and Production build at the same time... Duh...."
-          exit 1
-        }
+  - job: Build for ${{ parameters.BuildPlatform }}
+    displayName: Build for ${{ parameters.BuildPlatform }}
+    pool:
+      ${{ if ne(parameters.poolName, '') }}:
+        name: ${{ parameters.poolName }}
+        demands:
+          - msbuild
+          - visualstudio
+          - DotNetFramework
+      ${{ if ne(parameters.vmImage, '') }}:
+        vmImage: ${{ parameters.vmImage }}
+    steps:
+      - checkout: self
+        clean: true
+        fetchTags: false
+        persistCredentials: True
+      - task: PowerShell@2
+        displayName: Set staging/prod build vars for signing and telemetry copy
+        enabled: True
+        inputs:
+          targetType: inline
+          script: >-
+            if ($env:ForceStagingBuild -eq "true" -And $env:ForceProductionBuild -eq "true") {
+              Write-Host "You can't do a Staging and Production build at the same time... Duh...."
+              exit 1
+            }
 
 
-        $branchName = $env:BUILD_SOURCEBRANCH
+            $branchName = $env:BUILD_SOURCEBRANCH
 
-        if ($branchName -eq "refs/heads/main") {
-            Write-Host "##vso[task.setvariable variable=TelemetryType;]${{ parameters.TelemetryType }}"
-            Write-Host "Done setting telemetry key instance as ${{ parameters.TelemetryType }} for main branch"
-        } else {
-            Write-Host "##vso[task.setvariable variable=TelemetryType;]${{ parameters.TelemetryType }}"
-            Write-Host "Done setting telemetry key instance as ${{ parameters.TelemetryType }} for other branch"
-        }
+            if ($branchName -eq "refs/heads/main") {
+                Write-Host "##vso[task.setvariable variable=TelemetryType;]${{ parameters.TelemetryType }}"
+                Write-Host "Done setting telemetry key instance as ${{ parameters.TelemetryType }} for main branch"
+            } else {
+                Write-Host "##vso[task.setvariable variable=TelemetryType;]${{ parameters.TelemetryType }}"
+                Write-Host "Done setting telemetry key instance as ${{ parameters.TelemetryType }} for other branch"
+            }
 
-        Write-Host "##vso[task.setvariable variable=MicroBuild_NuPkgSigningEnabled;]true"
-  - task: MicroBuildSigningPlugin@3
-    name: ''
-    displayName: Install Signing Plugin
-    enabled: True
-    inputs:
-      signType: real
-      zipSources: false
-  - task: MicroBuildLocalizationPlugin@3
-    displayName: 'Install Localization Plugin'
-    enabled: True
-  - task: UseDotNet@2
-    displayName: Use .NET Core SDK 7.0.x
-    enabled: True
-    inputs:
-      version: $(BuildParameters.dotnetversion)
-      installationPath: $(Agent.TempDirectory)/dotnet
-  - task: DotNetCoreCLI@2 
-    displayName: restore EndpointManager (Windows) (to download runtime pack)
-    condition: or(eq(parameters['BuildPlatform'], 'win-x64'), eq(parameters['BuildPlatform'], 'win-arm64'))
-    inputs:
-      command: restore
-      projects: src\endpointmanager\endpointmanager.csproj
-      restoreArguments: -r ${{ parameters.BuildPlatform }}
-      selectOrConfig: config
-      nugetConfigPath: src/nuget.config
-      externalEndpoints: dba0ba50-2d4e-4f12-9f5a-42a638da803b # todo check what is this
-  - task: NuGetToolInstaller@1
-    name: 'Nuget tool installer'
-    displayName: Use NuGet 5.9.x
-    enabled: True
-    inputs:
-      versionSpec: $(BuildParameters.nugetversion)
-  - task: NuGetCommand@2
-    name: 'Nuget restore'
-    displayName: NuGet restore client.sln
-    enabled: True
-    inputs:
-      solution: src/client.sln
-      selectOrConfig: config
-      feedRestore: fc5819b5-ed1c-4a51-9766-a55ddb558d72
-      nugetConfigPath: src/nuget.config
-      externalEndpoints: dba0ba50-2d4e-4f12-9f5a-42a638da803b
-      verbosityRestore: Normal
-      searchPatternPush: $(Build.ArtifactStagingDirectory)/*.nupkg
-  - task: VSBuild@1
-    name: ''
-    displayName: Build client.sln for Loc and Tests
-    condition: and(succeeded(), eq(variables.RunTests, 'true'))
-    enabled: True
-    inputs:
-      solution: src/client.sln
-      msbuildArgs: -p:Localize=true -p:ConsumeEndpointManager=false
-      configuration: ${{ parameters.BuildConfiguration }}
-  - task: VSTest@2
-    displayName: Run Unit Tests
-    condition: and(succeeded(), eq(variables.RunTests, 'true'))
-    enabled: True
-    inputs:
-      testAssemblyVer2: '**\bin\${{ parameters.BuildConfiguration }}\*\*Tests.dll'
-      runSettingsFile: tests/unittests/dotnetcore.runsettings
-      runInParallel: true
-      codeCoverageEnabled: True
-      testRunTitle: Unit Tests
-      failOnMinTestsNotRun: true
-      rerunFailedTests: true
-  - task: CopyFiles@2
-    displayName: Collect Loc files
-    condition: and(succeeded(), eq(variables.RunTests, 'true'))
-    enabled: True
-    inputs:
-      Contents: >-
-        src/*/bin/*/*/localize/**/*
+            Write-Host "##vso[task.setvariable variable=MicroBuild_NuPkgSigningEnabled;]true"
+      - task: MicroBuildSigningPlugin@3
+        name: ""
+        displayName: Install Signing Plugin
+        enabled: True
+        inputs:
+          signType: real
+          zipSources: false
+      - task: MicroBuildLocalizationPlugin@3
+        displayName: "Install Localization Plugin"
+        enabled: True
+      - task: UseDotNet@2
+        displayName: Use .NET Core SDK 7.0.x
+        enabled: True
+        inputs:
+          version: $(BuildParameters.dotnetversion)
+          installationPath: $(Agent.TempDirectory)/dotnet
+      - task: DotNetCoreCLI@2
+        displayName: restore EndpointManager (Windows) (to download runtime pack)
+        condition: or(eq(parameters['BuildPlatform'], 'win-x64'), eq(parameters['BuildPlatform'], 'win-arm64'))
+        inputs:
+          command: restore
+          projects: src\endpointmanager\endpointmanager.csproj
+          restoreArguments: -r ${{ parameters.BuildPlatform }}
+          selectOrConfig: config
+          nugetConfigPath: src/nuget.config
+          externalEndpoints: dba0ba50-2d4e-4f12-9f5a-42a638da803b # todo check what is this
+      - task: NuGetToolInstaller@1
+        name: "Nuget tool installer"
+        displayName: Use NuGet 5.9.x
+        enabled: True
+        inputs:
+          versionSpec: $(BuildParameters.nugetversion)
+      - task: NuGetCommand@2
+        name: "Nuget restore"
+        displayName: NuGet restore client.sln
+        enabled: True
+        inputs:
+          solution: src/client.sln
+          selectOrConfig: config
+          feedRestore: fc5819b5-ed1c-4a51-9766-a55ddb558d72
+          nugetConfigPath: src/nuget.config
+          externalEndpoints: dba0ba50-2d4e-4f12-9f5a-42a638da803b
+          verbosityRestore: Normal
+          searchPatternPush: $(Build.ArtifactStagingDirectory)/*.nupkg
+      - task: VSBuild@1
+        name: ""
+        displayName: Build client.sln for Loc and Tests
+        condition: and(succeeded(), eq(variables.RunTests, 'true'))
+        enabled: True
+        inputs:
+          solution: src/client.sln
+          msbuildArgs: -p:Localize=true -p:ConsumeEndpointManager=false
+          configuration: ${{ parameters.BuildConfiguration }}
+      - task: VSTest@2
+        displayName: Run Unit Tests
+        condition: and(succeeded(), eq(variables.RunTests, 'true'))
+        enabled: True
+        inputs:
+          testAssemblyVer2: '**\bin\${{ parameters.BuildConfiguration }}\*\*Tests.dll'
+          runSettingsFile: tests/unittests/dotnetcore.runsettings
+          runInParallel: true
+          codeCoverageEnabled: True
+          testRunTitle: Unit Tests
+          failOnMinTestsNotRun: true
+          rerunFailedTests: true
+      - task: CopyFiles@2
+        displayName: Collect Loc files
+        condition: and(succeeded(), eq(variables.RunTests, 'true'))
+        enabled: True
+        inputs:
+          Contents: >-
+            src/*/bin/*/*/localize/**/*
 
-        src/*/bin/**/*.lce
+            src/*/bin/**/*.lce
 
-        src/dsc/bin/*/*/dsc.dll
+            src/dsc/bin/*/*/dsc.dll
 
-        src/endpointmanager/bin/*/*/endpointmanager.dll
+            src/endpointmanager/bin/*/*/endpointmanager.dll
 
-        src/common/bin/*/*/Microsoft.BridgeToKubernetes.Common.dll
+            src/common/bin/*/*/Microsoft.BridgeToKubernetes.Common.dll
 
-        src/library/bin/*/*/Microsoft.BridgeToKubernetes.Library.dll
-      TargetFolder: $(Build.ArtifactStagingDirectory)/Loc
-      OverWrite: true
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish Artifact: Loc'
-    condition: and(succeeded(), eq(variables.RunTests, 'true'))
-    enabled: True
-    inputs:
-      PathtoPublish: $(Build.ArtifactStagingDirectory)/Loc
-      ArtifactName: Loc
-      TargetPath: '\\my\share\$(Build.DefinitionName)\$(Build.BuildNumber)'
-  - task: DotNetCoreCLI@2
-    displayName: publish DSC ${{ parameters.BuildPlatform }}
-    enabled: True
-    inputs:
-      command: publish
-      publishWebProjects: false
-      projects: src\dsc\dsc.csproj
-      arguments: -c ${{ parameters.BuildConfiguration }} -r ${{ parameters.BuildPlatform }} --no-restore --self-contained ${{ parameters.SelfContained }} --verbosity detailed
-      zipAfterPublish: false
-      modifyOutputPath: false
-      selectOrConfig: config
-  - task: DotNetCoreCLI@2
-    displayName: publish EndpointManagerLauncher ${{ parameters.BuildPlatform }}
-    condition: or(eq(parameters['BuildPlatform'], 'win-x64'), eq(parameters['BuildPlatform'], 'win-arm64'))
-    enabled: True
-    inputs:
-      command: publish
-      publishWebProjects: false
-      projects: src\EndpointManagerLauncher\endpointmanagerlauncher.csproj
-      arguments: -c ${{ parameters.BuildConfiguration }} -r ${{ parameters.BuildPlatform }} --no-restore --verbosity detailed
-      zipAfterPublish: false
-      modifyOutputPath: false
-      selectOrConfig: config
-  - task: CopyFiles@2
-    displayName: Copy EndpointManager Launcher to dsc folder for ${{ parameters.BuildPlatform }}
-    condition: or(eq(parameters['BuildPlatform'], 'win-x64'), eq(parameters['BuildPlatform'], 'win-arm64'))
-    enabled: True
-    inputs:
-      SourceFolder: src/EndpointManagerLauncher/bin/${{ parameters.BuildConfiguration }}/$(BuildParameters.dotnetversionforbuild)/${{ parameters.BuildPlatform }}/publish/
-      Contents: >-
-        **/*
+            src/library/bin/*/*/Microsoft.BridgeToKubernetes.Library.dll
+          TargetFolder: $(Build.ArtifactStagingDirectory)/Loc
+          OverWrite: true
+      - task: PublishBuildArtifacts@1
+        displayName: "Publish Artifact: Loc"
+        condition: and(succeeded(), eq(variables.RunTests, 'true'))
+        enabled: True
+        inputs:
+          PathtoPublish: $(Build.ArtifactStagingDirectory)/Loc
+          ArtifactName: Loc
+          TargetPath: '\\my\share\$(Build.DefinitionName)\$(Build.BuildNumber)'
+      - task: DotNetCoreCLI@2
+        displayName: publish DSC ${{ parameters.BuildPlatform }}
+        enabled: True
+        inputs:
+          command: publish
+          publishWebProjects: false
+          projects: src\dsc\dsc.csproj
+          arguments: -c ${{ parameters.BuildConfiguration }} -r ${{ parameters.BuildPlatform }} --no-restore --self-contained ${{ parameters.SelfContained }} --verbosity detailed
+          zipAfterPublish: false
+          modifyOutputPath: false
+          selectOrConfig: config
+      - task: DotNetCoreCLI@2
+        displayName: publish EndpointManagerLauncher ${{ parameters.BuildPlatform }}
+        condition: or(eq(parameters['BuildPlatform'], 'win-x64'), eq(parameters['BuildPlatform'], 'win-arm64'))
+        enabled: True
+        inputs:
+          command: publish
+          publishWebProjects: false
+          projects: src\EndpointManagerLauncher\endpointmanagerlauncher.csproj
+          arguments: -c ${{ parameters.BuildConfiguration }} -r ${{ parameters.BuildPlatform }} --no-restore --verbosity detailed
+          zipAfterPublish: false
+          modifyOutputPath: false
+          selectOrConfig: config
+      - task: CopyFiles@2
+        displayName: Copy EndpointManager Launcher to dsc folder for ${{ parameters.BuildPlatform }}
+        condition: or(eq(parameters['BuildPlatform'], 'win-x64'), eq(parameters['BuildPlatform'], 'win-arm64'))
+        enabled: True
+        inputs:
+          SourceFolder: src/EndpointManagerLauncher/bin/${{ parameters.BuildConfiguration }}/$(BuildParameters.dotnetversionforbuild)/${{ parameters.BuildPlatform }}/publish/
+          Contents: >-
+            **/*
 
-        !**/*.pdb
-      TargetFolder: src/dsc/bin/${{ parameters.BuildConfiguration }}/$(BuildParameters.dotnetversionforbuild)/${{ parameters.BuildPlatform }}/publish/EndpointManagerLauncher
-      OverWrite: true
-  - task: PowerShell@2
-    displayName: Download kubectl
-    continueOnError: True
-    enabled: True
-    inputs:
-      targetType: inline
-      script: >
-        New-Item -Path './src/dsc/bin/${{ parameters.BuildConfiguration }}/$(BuildParameters.dotnetversionforbuild)/${{ parameters.BuildPlatform }}/publish/kubectl' -ItemType Directory
+            !**/*.pdb
+          TargetFolder: src/dsc/bin/${{ parameters.BuildConfiguration }}/$(BuildParameters.dotnetversionforbuild)/${{ parameters.BuildPlatform }}/publish/EndpointManagerLauncher
+          OverWrite: true
+      - task: PowerShell@2
+        displayName: Download kubectl
+        continueOnError: True
+        enabled: True
+        inputs:
+          targetType: inline
+          script: >
+            New-Item -Path './src/dsc/bin/${{ parameters.BuildConfiguration }}/$(BuildParameters.dotnetversionforbuild)/${{ parameters.BuildPlatform }}/publish/kubectl' -ItemType Directory
 
-        New-Item -Path './src/dsc/bin/${{ parameters.BuildConfiguration }}/$(BuildParameters.dotnetversionforbuild)/${{ parameters.BuildPlatform }}/publish/kubectl/${{parameters.KubectlPath}}' -ItemType Directory
+            New-Item -Path './src/dsc/bin/${{ parameters.BuildConfiguration }}/$(BuildParameters.dotnetversionforbuild)/${{ parameters.BuildPlatform }}/publish/kubectl/${{parameters.KubectlPath}}' -ItemType Directory
 
-        curl ${{parameters.KubectlDownloadUrl}} -OutFile ./src/dsc/bin/${{ parameters.BuildConfiguration }}/$(BuildParameters.dotnetversionforbuild)/${{ parameters.BuildPlatform }}/publish/kubectl/${{parameters.KubectlPath}}/${{parameters.KubectlFileName}}
-  - task: VSBuild@1
-    name: ''
-    displayName: Sign Files
-    enabled: True
-    inputs:
-      solution: src/client.signproj
-      msbuildArgs: /t:SignFiles /p:SignType=real
-      configuration: '${{ parameters.BuildConfiguration }} '
-  - task: CopyFiles@2
-    displayName: Collect files for .zip for ${{parameters.BuildPlatform}}
-    enabled: True
-    inputs:
-      SourceFolder: src/dsc/bin/${{ parameters.BuildConfiguration }}/$(BuildParameters.dotnetversionforbuild)/${{parameters.BuildPlatform}}/publish
-      Contents: >-
-        **/*
+            curl ${{parameters.KubectlDownloadUrl}} -OutFile ./src/dsc/bin/${{ parameters.BuildConfiguration }}/$(BuildParameters.dotnetversionforbuild)/${{ parameters.BuildPlatform }}/publish/kubectl/${{parameters.KubectlPath}}/${{parameters.KubectlFileName}}
+      - task: VSBuild@1
+        name: ""
+        displayName: Sign Files
+        enabled: True
+        inputs:
+          solution: src/client.signproj
+          msbuildArgs: /t:SignFiles /p:SignType=real
+          configuration: "${{ parameters.BuildConfiguration }} "
+      - task: CopyFiles@2
+        displayName: Collect files for .zip for ${{parameters.BuildPlatform}}
+        enabled: True
+        inputs:
+          SourceFolder: src/dsc/bin/${{ parameters.BuildConfiguration }}/$(BuildParameters.dotnetversionforbuild)/${{parameters.BuildPlatform}}/publish
+          Contents: >-
+            **/*
 
-        !**/*.pdb
+            !**/*.pdb
 
-        !**/*.xml
+            !**/*.xml
 
-        !**/*.nuspec
+            !**/*.nuspec
 
-        !**/cs/*
+            !**/cs/*
 
-        !**/de/*
+            !**/de/*
 
-        !**/es/*
+            !**/es/*
 
-        !**/fr/*
+            !**/fr/*
 
-        !**/it/*
+            !**/it/*
 
-        !**/ja/*
+            !**/ja/*
 
-        !**/ko/*
+            !**/ko/*
 
-        !**/pl/*
+            !**/pl/*
 
-        !**/pt-BR/*
+            !**/pt-BR/*
 
-        !**/ru/*
+            !**/ru/*
 
-        !**/tr/*
+            !**/tr/*
 
-        !**/zh-Hans/*
+            !**/zh-Hans/*
 
-        !**/zh-Hant/*
-      TargetFolder: $(Agent.TempDirectory)/zip/${{parameters.ZipFilePathName}}
-  - task: ArchiveFiles@2
-    displayName: Create .zip file for ${{parameters.BuildPlatform}}
-    enabled: True
-    inputs:
-      rootFolderOrFile: $(Agent.TempDirectory)/zip/${{parameters.ZipFilePathName}}
-      includeRootFolder: false
-      sevenZipCompression: 5
-      archiveFile: $(Build.ArtifactStagingDirectory)/zip/${{parameters.ZipFileName}}
-  - task: ManifestGeneratorTask@0
-    displayName: Manifest Generator for zip
-    enabled: True
-    inputs:
-      BuildDropPath: $(Build.ArtifactStagingDirectory)/zip
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish Artifact: zip'
-    enabled: True
-    inputs:
-      PathtoPublish: $(Build.ArtifactStagingDirectory)/zip
-      ArtifactName: zip
-      TargetPath: '\\my\share\$(Build.DefinitionName)\$(Build.BuildNumber)'
-  - task: DotNetCoreCLI@2
-    displayName: 'dotnet pack CLI NuGet (Windows)'
-    condition: and(eq(parameters['SelfContained'], 'true') or(eq(parameters['BuildPlatform'], 'win-x64'), eq(parameters['BuildPlatform'], 'win-arm64')))
-    inputs:
-      command: pack
-      feedsToUse: config
-      packagesToPack: src/dsc/dsc.csproj
-      packDirectory: '$(Build.ArtifactStagingDirectory)/nuget'
-      nobuild: true
-      buildProperties: 'Configuration=${{ parameters.BuildConfiguration }};NuspecFile=bin\${{ parameters.BuildConfiguration }}\$(BuildParameters.dotnetversionforbuild)\${{parameters.BuildPlatform}}\publish\dsc.nuspec'
-  - task: AzureArtifacts.manifest-generator-task.manifest-generator-task.ManifestGeneratorTask@0
-    displayName: 'Manifest Generator for nuget'
-    inputs:
-      BuildDropPath: '$(Build.ArtifactStagingDirectory)/nuget'
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish Artifact: nuget'
-    inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)/nuget'
-      ArtifactName: nuget
-  - task: CodeSign@1
-    displayName: Validate Signatures nuget
-    inputs:
-      Path: '$(Build.ArtifactStagingDirectory)/nuget'
-  - task: CopyFiles@2
-    displayName: Collect Build Symbols - dsc
-    enabled: True
-    inputs:
-      SourceFolder: src/dsc/bin/${{ parameters.BuildConfiguration }}/$(BuildParameters.dotnetversionforbuild)
-      Contents: >-
-        */publish/dsc.?(pdb|exe|dll|)
+            !**/zh-Hant/*
+          TargetFolder: $(Agent.TempDirectory)/zip/${{parameters.ZipFilePathName}}
+      - task: ArchiveFiles@2
+        displayName: Create .zip file for ${{parameters.BuildPlatform}}
+        enabled: True
+        inputs:
+          rootFolderOrFile: $(Agent.TempDirectory)/zip/${{parameters.ZipFilePathName}}
+          includeRootFolder: false
+          sevenZipCompression: 5
+          archiveFile: $(Build.ArtifactStagingDirectory)/zip/${{parameters.ZipFileName}}
+      - task: ManifestGeneratorTask@0
+        displayName: Manifest Generator for zip
+        enabled: True
+        inputs:
+          BuildDropPath: $(Build.ArtifactStagingDirectory)/zip
+      - task: PublishBuildArtifacts@1
+        displayName: "Publish Artifact: zip"
+        enabled: True
+        inputs:
+          PathtoPublish: $(Build.ArtifactStagingDirectory)/zip
+          ArtifactName: zip
+          TargetPath: '\\my\share\$(Build.DefinitionName)\$(Build.BuildNumber)'
+      - task: DotNetCoreCLI@2
+        displayName: "dotnet pack CLI NuGet (Windows)"
+        condition: and(eq(parameters['SelfContained'], 'true') or(eq(parameters['BuildPlatform'], 'win-x64'), eq(parameters['BuildPlatform'], 'win-arm64')))
+        inputs:
+          command: pack
+          feedsToUse: config
+          packagesToPack: src/dsc/dsc.csproj
+          packDirectory: "$(Build.ArtifactStagingDirectory)/nuget"
+          nobuild: true
+          buildProperties: 'Configuration=${{ parameters.BuildConfiguration }};NuspecFile=bin\${{ parameters.BuildConfiguration }}\$(BuildParameters.dotnetversionforbuild)\${{parameters.BuildPlatform}}\publish\dsc.nuspec'
+      - task: AzureArtifacts.manifest-generator-task.manifest-generator-task.ManifestGeneratorTask@0
+        displayName: "Manifest Generator for nuget"
+        inputs:
+          BuildDropPath: "$(Build.ArtifactStagingDirectory)/nuget"
+      - task: PublishBuildArtifacts@1
+        displayName: "Publish Artifact: nuget"
+        inputs:
+          PathtoPublish: "$(Build.ArtifactStagingDirectory)/nuget"
+          ArtifactName: nuget
+      - task: CodeSign@1
+        displayName: Validate Signatures nuget
+        inputs:
+          Path: "$(Build.ArtifactStagingDirectory)/nuget"
+      - task: CopyFiles@2
+        displayName: Collect Build Symbols - dsc
+        enabled: True
+        inputs:
+          SourceFolder: src/dsc/bin/${{ parameters.BuildConfiguration }}/$(BuildParameters.dotnetversionforbuild)
+          Contents: >-
+            */publish/dsc.?(pdb|exe|dll|)
 
-        */publish/Microsoft.BridgeToKubernetes.*.@(pdb|exe|dll|)
+            */publish/Microsoft.BridgeToKubernetes.*.@(pdb|exe|dll|)
 
-        */publish/EndpointManager/EndpointManager.?(pdb|exe|dll|)
+            */publish/EndpointManager/EndpointManager.?(pdb|exe|dll|)
 
-        */publish/EndpointManager/Microsoft.BridgeToKubernetes.*.@(pdb|exe|dll|)
-      TargetFolder: $(Build.ArtifactStagingDirectory)/symbols
-      OverWrite: true
-  - task: PublishSymbols@2
-    displayName: Enable Source Server
-    condition: and(succeeded(), eq(variables.RunTests, 'true'))
-    enabled: True
-    inputs:
-      SymbolsFolder: $(Build.ArtifactStagingDirectory)/symbols
-      SearchPattern: '**/*.pdb'
-      SymbolServerType: TeamServices
-  - task: CopyFiles@2
-    displayName: Copy buildWindowsPDBs.ps1 to artifact directory
-    condition: or(eq(parameters['BuildPlatform'], 'win-x64'), eq(parameters['BuildPlatform'], 'win-arm64'))
-    enabled: True
-    inputs:
-      SourceFolder: build
-      Contents: buildWindowsPDBs.ps1
-      TargetFolder: $(Build.ArtifactStagingDirectory)/symbols/
-      OverWrite: true
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish Artifact: symbols'
-    condition: and(succeeded(), eq(variables.RunTests, 'true'))
-    enabled: True
-    inputs:
-      PathtoPublish: $(Build.ArtifactStagingDirectory)/symbols
-      ArtifactName: symbols
-      TargetPath: '\\my\share\$(Build.DefinitionName)\$(Build.BuildNumber)'
-  - task: tagBuildOrRelease@0
-    displayName: Tag BuildConfiguration
-    enabled: True
-    inputs:
-      tags: 'BuildConfiguration: ${{ parameters.BuildConfiguration }}'
+            */publish/EndpointManager/Microsoft.BridgeToKubernetes.*.@(pdb|exe|dll|)
+          TargetFolder: $(Build.ArtifactStagingDirectory)/symbols
+          OverWrite: true
+      - task: PublishSymbols@2
+        displayName: Enable Source Server
+        condition: and(succeeded(), eq(variables.RunTests, 'true'))
+        enabled: True
+        inputs:
+          SymbolsFolder: $(Build.ArtifactStagingDirectory)/symbols
+          SearchPattern: "**/*.pdb"
+          SymbolServerType: TeamServices
+      - task: CopyFiles@2
+        displayName: Copy buildWindowsPDBs.ps1 to artifact directory
+        condition: or(eq(parameters['BuildPlatform'], 'win-x64'), eq(parameters['BuildPlatform'], 'win-arm64'))
+        enabled: True
+        inputs:
+          SourceFolder: build
+          Contents: buildWindowsPDBs.ps1
+          TargetFolder: $(Build.ArtifactStagingDirectory)/symbols/
+          OverWrite: true
+      - task: PublishBuildArtifacts@1
+        displayName: "Publish Artifact: symbols"
+        condition: and(succeeded(), eq(variables.RunTests, 'true'))
+        enabled: True
+        inputs:
+          PathtoPublish: $(Build.ArtifactStagingDirectory)/symbols
+          ArtifactName: symbols
+          TargetPath: '\\my\share\$(Build.DefinitionName)\$(Build.BuildNumber)'
+      - task: tagBuildOrRelease@0
+        displayName: Tag BuildConfiguration
+        enabled: True
+        inputs:
+          tags: "BuildConfiguration: ${{ parameters.BuildConfiguration }}"
 
-  - task: SdtReport@2
-    inputs:
-      GdnExportAllTools: true
-      GdnExportHtmlFile: true
-  - task: PublishSecurityAnalysisLogs@3
-    inputs:
-      ArtifactName: 'CodeAnalysisLogs'
-      ArtifactType: 'Container'
-      AllTools: true
-      ToolLogsNotFoundAction: 'Standard'
-  - task: PostAnalysis@2
-    inputs:
-      GdnBreakAllTools: true
-      GdnBreakFast: true
+      - task: SdtReport@2
+        inputs:
+          GdnExportAllTools: true
+          GdnExportHtmlFile: true
+      - task: PublishSecurityAnalysisLogs@3
+        inputs:
+          ArtifactName: "CodeAnalysisLogs"
+          ArtifactType: "Container"
+          AllTools: true
+          ToolLogsNotFoundAction: "Standard"
+      - task: PostAnalysis@2
+        inputs:
+          GdnBreakAllTools: true
+          GdnBreakFast: true
