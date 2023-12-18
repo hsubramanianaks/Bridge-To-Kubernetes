@@ -1,0 +1,38 @@
+jobs:
+ - job : 'Generate LKS.JSON' for all build platforms
+    pool:
+      vmImage: 'windows-latest'
+steps:
+  - task: PowerShell@2
+    displayName: Generate lks.json for .zip files
+    enabled: True
+    inputs:
+      targetType: inline
+      script: >-
+        $ZipHost = "mindaromaster.blob.core.windows.net"
+
+        $BlobUrl = "https://$ZipHost/zip/1.0.$env:BUILD_BUILDNUMBER"
+
+        $ZipDir = "$env:BUILD_ARTIFACTSTAGINGDIRECTORY/zip"
+
+        $Win = @{ url="$BlobUrl/lpk-win.zip"; sha256hash="$((Get-FileHash $ZipDir\lpk-win.zip).Hash)" }
+
+        $OSX = @{ url="$BlobUrl/lpk-osx.zip"; sha256hash="$((Get-FileHash $ZipDir\lpk-osx.zip).Hash)" }
+
+        $Linux = @{ url="$BlobUrl/lpk-linux.zip"; sha256hash="$((Get-FileHash $ZipDir\lpk-linux.zip).Hash)" }
+
+        $Win_Arm64 = @{ url="$BlobUrl/lpk-win-arm64.zip"; sha256hash="$((Get-FileHash $ZipDir\lpk-win-arm64.zip).Hash)" }
+
+        $OSX_Arm64 = @{ url="$BlobUrl/lpk-osx-arm64.zip"; sha256hash="$((Get-FileHash $ZipDir\lpk-osx-arm64.zip).Hash)" }
+
+        $Linux_Arm64 = @{ url="$BlobUrl/lpk-linux-arm64.zip"; sha256hash="$((Get-FileHash $ZipDir\lpk-linux-arm64.zip).Hash)" }
+
+        $Json = @{ version="1.0.$env:BUILD_BUILDNUMBER"; win = $Win; osx = $OSX; linux = $Linux; win_arm64 = $Win_Arm64; linux_arm64 = $Linux_Arm64; osx_arm64 = $OSX_Arm64 } | ConvertTo-Json
+
+        $Json | Out-File -FilePath $ZipDir/lks.json -Encoding ascii
+
+        New-Item -ItemType directory -Path $ZipDir/1.0.$env:BUILD_BUILDNUMBER
+
+        $Json | Out-File -FilePath $ZipDir/1.0.$env:BUILD_BUILDNUMBER/lks.json -Encoding ascii
+
+        Write-Host $Json
