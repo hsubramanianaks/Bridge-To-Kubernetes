@@ -163,16 +163,16 @@ strategy:
 steps:
   - template: templates/build.yml
     parameters:
-      TelemetryType: ${{ matrix.TelemetryType }}
-      BuildConfiguration: ${{ matrix.BuildConfiguration }}
-      BuildPlatform: ${{ matrix.BuildPlatform }}
-      SelfContained: ${{ matrix.SelfContained }}
-      KubectlDownloadUrl: ${{ matrix.KubectlDownloadUrl }}
-      KubectlPath: ${{ matrix.KubectlPath }}
-      KubectlFileName: ${{ matrix.KubectlFileName }}
-      ZipFilePathName: ${{ matrix.ZipFilePathName }}
-      ZipFileName: ${{ matrix.ZipFileName }}
-      poolName: ${{ matrix.poolName }}
-      vmImage: ${{ matrix.vmImage }}
+      TelemetryType: $(TelemetryType)
+      BuildConfiguration: $(BuildConfiguration)
+      BuildPlatform: $(BuildPlatform)
+      SelfContained: $(SelfContained)
+      KubectlDownloadUrl: $(KubectlDownloadUrl)
+      KubectlPath: $(KubectlPath)
+      KubectlFileName: $(KubectlFileName)
+      ZipFilePathName: $(ZipFilePathName)
+      ZipFileName: $(ZipFileName)
+      poolName: $(poolName)
+      vmImage: $(vmImage)
   # - template: templates/generate-lks.yml
   #   condition: and(succeeded())
