@@ -148,13 +148,13 @@ steps:
       nugetConfigPath: src/nuget.config
       externalEndpoints: dba0ba50-2d4e-4f12-9f5a-42a638da803b # todo check what is this
   - task: NuGetToolInstaller@1
-    name: "Nuget tool installer"
+    name: ''
     displayName: Use NuGet 5.9.x
     enabled: True
     inputs:
       versionSpec: $(BuildParameters.nugetversion)
   - task: NuGetCommand@2
-    name: "Nuget restore"
+    name: ''
     displayName: NuGet restore client.sln
     enabled: True
     inputs:
