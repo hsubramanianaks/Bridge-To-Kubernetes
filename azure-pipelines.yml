@@ -25,75 +25,7 @@ resources:
 
 strategy:
   matrix:
-    self-contained:
-      win-x64:
-          TelemetryType: ${{ parameters.TelemetryType }}
-          BuildConfiguration: ${{ parameters.BuildConfiguration }}
-          BuildPlatform: 'win-x64'
-          SelfContained: false
-          KubectlDownloadUrl: 'https://dl.k8s.io/release/v1.27.3/bin/windows/amd64/kubectl.exe'
-          KubectlPath: 'win'
-          KubectlFileName: 'kubectl.exe'
-          ZipFilePathName: 'win'
-          ZipFileName: 'lpk-win.zip'
-          poolName: 'VSEngSS-MicroBuild2022-1ES'
-      win-arm64:
-        TelemetryType: ${{ parameters.TelemetryType }}
-        BuildConfiguration: ${{ parameters.BuildConfiguration }}
-        BuildPlatform: 'win-arm64'
-        SelfContained: false
-        KubectlDownloadUrl: 'https://dl.k8s.io/release/v1.27.3/bin/windows/arm64/kubectl.exe'
-        KubectlPath: 'win'
-        KubectlFileName: 'kubectl.exe'
-        ZipFilePathName: 'win-arm64'
-        ZipFileName: 'lpk-win-arm64.zip'
-        poolName: 'VSEngSS-MicroBuild2022-1ES'
-      linux-x64:
-        TelemetryType: ${{ parameters.TelemetryType }}
-        BuildConfiguration: ${{ parameters.BuildConfiguration }}
-        BuildPlatform: 'linux-x64'
-        SelfContained: false
-        KubectlDownloadUrl: 'https://dl.k8s.io/release/v1.27.3/bin/linux/amd64/kubectl'
-        KubectlPath: 'linux'
-        KubectlFileName: 'kubectl'
-        ZipFilePathName: 'linux'
-        ZipFileName: 'lpk-linux.zip'
-        poolName: 'VSEngSS-MicroBuild2022-1ES'
-      linux-arm64:
-        TelemetryType: ${{ parameters.TelemetryType }}
-        BuildConfiguration: ${{ parameters.BuildConfiguration }}
-        BuildPlatform: 'linux-arm64'
-        SelfContained: true
-        KubectlDownloadUrl: 'https://dl.k8s.io/release/v1.27.3/bin/linux/arm64/kubectl'
-        KubectlPath: 'linux'
-        KubectlFileName: 'kubectl'
-        ZipFilePathName: 'linux-arm64'
-        ZipFileName: 'lpk-linux-arm64.zip'
-        poolName: 'VSEngSS-MicroBuild2022-1ES'
-      osx-x64:
-        TelemetryType: ${{ parameters.TelemetryType }}
-        BuildConfiguration: ${{ parameters.BuildConfiguration }}
-        BuildPlatform: 'osx-x64'
-        SelfContained: false
-        KubectlDownloadUrl: 'https://dl.k8s.io/release/v1.27.3/bin/darwin/amd64/kubectl'
-        KubectlPath: 'osx'
-        KubectlFileName: 'kubectl'
-        ZipFilePathName: 'osx'
-        ZipFileName: 'lpk-osx.zip'
-        poolName: 'VSEngSS-MicroBuild2022-1ES'
-      osx-arm64:
-        TelemetryType: ${{ parameters.TelemetryType }}
-        BuildConfiguration: ${{ parameters.BuildConfiguration }}
-        BuildPlatform: 'osx-arm64'
-        SelfContained: false
-        KubectlDownloadUrl: 'https://dl.k8s.io/release/v1.27.3/bin/darwin/arm64/kubectl'
-        KubectlPath: 'osx'
-        KubectlFileName: 'kubectl'
-        ZipFilePathName: 'osx-arm64'
-        ZipFileName: 'lpk-osx-arm64.zip'
-        vmImage: 'macos-13-arm64'
-    non-selfcontained:
-      win-x64:
+    win-x64:
         TelemetryType: ${{ parameters.TelemetryType }}
         BuildConfiguration: ${{ parameters.BuildConfiguration }}
         BuildPlatform: 'win-x64'
@@ -104,18 +36,18 @@ strategy:
         ZipFilePathName: 'win'
         ZipFileName: 'lpk-win.zip'
         poolName: 'VSEngSS-MicroBuild2022-1ES'
-      win-arm64:
+    win-arm64:
         TelemetryType: ${{ parameters.TelemetryType }}
         BuildConfiguration: ${{ parameters.BuildConfiguration }}
         BuildPlatform: 'win-arm64'
-        SelfContained: true
+        SelfContained: false
         KubectlDownloadUrl: 'https://dl.k8s.io/release/v1.27.3/bin/windows/arm64/kubectl.exe'
         KubectlPath: 'win'
         KubectlFileName: 'kubectl.exe'
         ZipFilePathName: 'win-arm64'
         ZipFileName: 'lpk-win-arm64.zip'
         poolName: 'VSEngSS-MicroBuild2022-1ES'
-      linux-x64:
+    linux-x64:
         TelemetryType: ${{ parameters.TelemetryType }}
         BuildConfiguration: ${{ parameters.BuildConfiguration }}
         BuildPlatform: 'linux-x64'
@@ -126,7 +58,7 @@ strategy:
         ZipFilePathName: 'linux'
         ZipFileName: 'lpk-linux.zip'
         poolName: 'VSEngSS-MicroBuild2022-1ES'
-      linux-arm64:
+    linux-arm64:
         TelemetryType: ${{ parameters.TelemetryType }}
         BuildConfiguration: ${{ parameters.BuildConfiguration }}
         BuildPlatform: 'linux-arm64'
@@ -137,7 +69,7 @@ strategy:
         ZipFilePathName: 'linux-arm64'
         ZipFileName: 'lpk-linux-arm64.zip'
         poolName: 'VSEngSS-MicroBuild2022-1ES'
-      osx-x64:
+    osx-x64:
         TelemetryType: ${{ parameters.TelemetryType }}
         BuildConfiguration: ${{ parameters.BuildConfiguration }}
         BuildPlatform: 'osx-x64'
@@ -148,17 +80,84 @@ strategy:
         ZipFilePathName: 'osx'
         ZipFileName: 'lpk-osx.zip'
         poolName: 'VSEngSS-MicroBuild2022-1ES'
-      osx-arm64:
+    osx-arm64:
         TelemetryType: ${{ parameters.TelemetryType }}
         BuildConfiguration: ${{ parameters.BuildConfiguration }}
         BuildPlatform: 'osx-arm64'
-        SelfContained: true
+        SelfContained: false
         KubectlDownloadUrl: 'https://dl.k8s.io/release/v1.27.3/bin/darwin/arm64/kubectl'
         KubectlPath: 'osx'
         KubectlFileName: 'kubectl'
         ZipFilePathName: 'osx-arm64'
         ZipFileName: 'lpk-osx-arm64.zip'
         vmImage: 'macos-13-arm64'
+    # non-selfcontained:
+    #   win-x64:
+    #     TelemetryType: ${{ parameters.TelemetryType }}
+    #     BuildConfiguration: ${{ parameters.BuildConfiguration }}
+    #     BuildPlatform: 'win-x64'
+    #     SelfContained: false
+    #     KubectlDownloadUrl: 'https://dl.k8s.io/release/v1.27.3/bin/windows/amd64/kubectl.exe'
+    #     KubectlPath: 'win'
+    #     KubectlFileName: 'kubectl.exe'
+    #     ZipFilePathName: 'win'
+    #     ZipFileName: 'lpk-win.zip'
+    #     poolName: 'VSEngSS-MicroBuild2022-1ES'
+    #   win-arm64:
+    #     TelemetryType: ${{ parameters.TelemetryType }}
+    #     BuildConfiguration: ${{ parameters.BuildConfiguration }}
+    #     BuildPlatform: 'win-arm64'
+    #     SelfContained: true
+    #     KubectlDownloadUrl: 'https://dl.k8s.io/release/v1.27.3/bin/windows/arm64/kubectl.exe'
+    #     KubectlPath: 'win'
+    #     KubectlFileName: 'kubectl.exe'
+    #     ZipFilePathName: 'win-arm64'
+    #     ZipFileName: 'lpk-win-arm64.zip'
+    #     poolName: 'VSEngSS-MicroBuild2022-1ES'
+    #   linux-x64:
+    #     TelemetryType: ${{ parameters.TelemetryType }}
+    #     BuildConfiguration: ${{ parameters.BuildConfiguration }}
+    #     BuildPlatform: 'linux-x64'
+    #     SelfContained: false
+    #     KubectlDownloadUrl: 'https://dl.k8s.io/release/v1.27.3/bin/linux/amd64/kubectl'
+    #     KubectlPath: 'linux'
+    #     KubectlFileName: 'kubectl'
+    #     ZipFilePathName: 'linux'
+    #     ZipFileName: 'lpk-linux.zip'
+    #     poolName: 'VSEngSS-MicroBuild2022-1ES'
+    #   linux-arm64:
+    #     TelemetryType: ${{ parameters.TelemetryType }}
+    #     BuildConfiguration: ${{ parameters.BuildConfiguration }}
+    #     BuildPlatform: 'linux-arm64'
+    #     SelfContained: true
+    #     KubectlDownloadUrl: 'https://dl.k8s.io/release/v1.27.3/bin/linux/arm64/kubectl'
+    #     KubectlPath: 'linux'
+    #     KubectlFileName: 'kubectl'
+    #     ZipFilePathName: 'linux-arm64'
+    #     ZipFileName: 'lpk-linux-arm64.zip'
+    #     poolName: 'VSEngSS-MicroBuild2022-1ES'
+    #   osx-x64:
+    #     TelemetryType: ${{ parameters.TelemetryType }}
+    #     BuildConfiguration: ${{ parameters.BuildConfiguration }}
+    #     BuildPlatform: 'osx-x64'
+    #     SelfContained: false
+    #     KubectlDownloadUrl: 'https://dl.k8s.io/release/v1.27.3/bin/darwin/amd64/kubectl'
+    #     KubectlPath: 'osx'
+    #     KubectlFileName: 'kubectl'
+    #     ZipFilePathName: 'osx'
+    #     ZipFileName: 'lpk-osx.zip'
+    #     poolName: 'VSEngSS-MicroBuild2022-1ES'
+    #   osx-arm64:
+    #     TelemetryType: ${{ parameters.TelemetryType }}
+    #     BuildConfiguration: ${{ parameters.BuildConfiguration }}
+    #     BuildPlatform: 'osx-arm64'
+    #     SelfContained: true
+    #     KubectlDownloadUrl: 'https://dl.k8s.io/release/v1.27.3/bin/darwin/arm64/kubectl'
+    #     KubectlPath: 'osx'
+    #     KubectlFileName: 'kubectl'
+    #     ZipFilePathName: 'osx-arm64'
+    #     ZipFileName: 'lpk-osx-arm64.zip'
+    #     vmImage: 'macos-13-arm64'
 
 
 jobs:
