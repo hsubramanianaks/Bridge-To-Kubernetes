@@ -139,7 +139,7 @@ steps:
       installationPath: $(Agent.TempDirectory)/dotnet
   - task: DotNetCoreCLI@2
     displayName: restore EndpointManager (Windows) (to download runtime pack)
-    condition: or(eq(parameters['BuildPlatform'], 'win-x64'), eq(parameters['BuildPlatform'], 'win-arm64'))
+    condition: or(eq('${{ parameters.BuildPlatform }}', 'win-x64'), eq('${{ parameters.BuildPlatform }}', 'win-arm64'))
     inputs:
       command: restore
       projects: src\endpointmanager\endpointmanager.csproj
@@ -226,7 +226,7 @@ steps:
       selectOrConfig: config
   - task: DotNetCoreCLI@2
     displayName: publish EndpointManagerLauncher ${{ parameters.BuildPlatform }}
-    condition: or(eq(parameters['BuildPlatform'], 'win-x64'), eq(parameters['BuildPlatform'], 'win-arm64'))
+    condition: or(eq('${{ parameters.BuildPlatform }}', 'win-x64'), eq('${{ parameters.BuildPlatform }}', 'win-arm64'))
     enabled: True
     inputs:
       command: publish
@@ -238,7 +238,7 @@ steps:
       selectOrConfig: config
   - task: CopyFiles@2
     displayName: Copy EndpointManager Launcher to dsc folder for ${{ parameters.BuildPlatform }}
-    condition: or(eq(parameters['BuildPlatform'], 'win-x64'), eq(parameters['BuildPlatform'], 'win-arm64'))
+    condition: or(eq('${{ parameters.BuildPlatform }}', 'win-x64'), eq('${{ parameters.BuildPlatform }}', 'win-arm64'))
     enabled: True
     inputs:
       SourceFolder: src/EndpointManagerLauncher/bin/${{ parameters.BuildConfiguration }}/$(BuildParameters.dotnetversionforbuild)/${{ parameters.BuildPlatform }}/publish/
@@ -330,7 +330,7 @@ steps:
       TargetPath: '\\my\share\$(Build.DefinitionName)\$(Build.BuildNumber)'
   - task: DotNetCoreCLI@2
     displayName: "dotnet pack CLI NuGet (Windows)"
-    condition: and(eq(parameters['SelfContained'], 'true'), or(eq(parameters['BuildPlatform'], 'win-x64'), eq(parameters['BuildPlatform'], 'win-arm64')))
+    condition: and(eq('${{ parameters.Selfcontained }}', 'true'), or(eq('${{ parameters.BuildPlatform }}', 'win-x64'), eq('${{ parameters.BuildPlatform }}', 'win-arm64')))
     inputs:
       command: pack
       feedsToUse: config
@@ -376,7 +376,7 @@ steps:
       SymbolServerType: TeamServices
   - task: CopyFiles@2
     displayName: Copy buildWindowsPDBs.ps1 to artifact directory
-    condition: or(eq(parameters['BuildPlatform'], 'win-x64'), eq(parameters['BuildPlatform'], 'win-arm64'))
+    condition: or(eq('${{ parameters.BuildPlatform }}', 'win-x64'), eq('${{ parameters.BuildPlatform }}', 'win-arm64'))
     enabled: True
     inputs:
       SourceFolder: build
