@@ -160,9 +160,7 @@ strategy:
     #     vmImage: 'macos-13-arm64'
 
 
-jobs:
-- job: Build
-  steps:
+steps:
   - template: templates/build.yml
     parameters:
       TelemetryType: ${{ matrix.TelemetryType }}
@@ -176,7 +174,5 @@ jobs:
       ZipFileName: ${{ matrix.ZipFileName }}
       poolName: ${{ matrix.poolName }}
       vmImage: ${{ matrix.vmImage }}
-- job: lks.json
-  steps:
-  - template: templates/generate-lks.yml
-    condition: and(succeeded())
+  # - template: templates/generate-lks.yml
+  #   condition: and(succeeded())
