@@ -15,68 +15,32 @@ parameters:
   - name: BuildPlatform
     displayName: BuildPlatform to be used
     default: "win-x64"
-    values:
-      - win-x64
-      - win-arm65
-      - linux-x64
-      - linux-arm64
-      - osx-x64
-      - osx-arm64
   - name: SelfContained
     displayName: SelfContained to be used
     default: "true"
-    values:
-      - true
-      - false
   - name: KubectlDownloadUrl
     displayName: KubectlDownloadUrl to be used
     default: "https://dl.k8s.io/release/v1.27.3/bin/windows/amd64/kubectl.exe"
-    values:
-      - https://dl.k8s.io/release/v1.27.3/bin/windows/amd64/kubectl.exe
-      - https://dl.k8s.io/release/v1.27.3/bin/darwin/amd64/kubectl
-      - https://dl.k8s.io/release/v1.27.3/bin/linux/amd64/kubectl
-      - https://dl.k8s.io/release/v1.27.3/bin/windows/arm64/kubectl.exe
-      - https://dl.k8s.io/release/v1.27.3/bin/darwin/arm64/kubectl
-      - https://dl.k8s.io/release/v1.27.3/bin/linux/arm64/kubectl
   - name: KubectlPath
     displayName: KubectlPath to be used
     default: win
-    values:
-      - win
-      - osx
-      - linux
   - name: KubectlFileName
     displayName: KubectlFileName to be used
     default: kubectl.exe
-    values:
-      - kubectl.exe
-      - kubectl
   - name: ZipFilePathName
     displayName: ZipFilePathName to be used
     default: win
-    values:
-      - win
-      - osx
-      - linux
-      - win-arm64
-      - osx-arm64
-      - linux-arm64
   - name: ZipFileName
     displayName: ZipFileName to be used
     default: lpk-win.zip
-    values:
-      - lpk-win.zip
-      - lpk-osx.zip
-      - lpk-linux.zip
-      - lpk-win-arm64.zip
-      - lpk-osx-arm64.zip
-      - lpk-linux-arm64.zip
 
 steps:
   - checkout: self
     clean: true
     fetchTags: false
     persistCredentials: True
+  - script: |
+      echo "build platform is ${{ parameters.BuildPlatform }}"
   - task: PowerShell@2
     displayName: Set staging/prod build vars for signing and telemetry copy
     enabled: True
