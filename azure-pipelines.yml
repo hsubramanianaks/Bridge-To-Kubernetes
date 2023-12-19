@@ -39,6 +39,18 @@ parameters:
   - name: ZipFileName
     displayName: ZipFileName to be used
     default: "lpk-win.zip"
+
+variables:
+- name: BuildParameters.dotnetversion
+  value: 7.0.x
+- name: BuildParameters.dotnetversionforbuild
+  value: net7.0
+- name: BuildParameters.nugetversion
+  value: 5.9.x
+- name: TeamName
+  value: Mindaro
+- name: RunTests
+  value: "true"
   
 
 trigger: none
