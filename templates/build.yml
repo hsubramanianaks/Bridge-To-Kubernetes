@@ -102,14 +102,22 @@ steps:
       externalEndpoints: dba0ba50-2d4e-4f12-9f5a-42a638da803b
       verbosityRestore: Normal
       searchPatternPush: $(Build.ArtifactStagingDirectory)/*.nupkg
-  - task: VSBuild@1
-    name: ""
-    displayName: Build client.sln for Loc and Tests
-    condition: and(succeeded(), eq(variables.RunTests, 'true'))
+  # - task: VSBuild@1
+  #   name: ""
+  #   displayName: Build client.sln for Loc and Tests
+  #   condition: and(succeeded(), eq(variables.RunTests, 'true'))
+  #   enabled: True
+  #   inputs:
+  #     solution: src/client.sln
+  #     msbuildArgs: -p:Localize=true -p:ConsumeEndpointManager=false
+  - task: DotNetCoreCLI@2
+    displayName: build client.sln for Loc and Tests
     enabled: True
+    condition: and(succeeded(), eq(variables.RunTests, 'true'))
     inputs:
-      solution: src/client.sln
-      msbuildArgs: -p:Localize=true -p:ConsumeEndpointManager=false
+      command: build
+      projects: src/client.sln
+      arguments: -p:Localize=true -p:ConsumeEndpointManager=false
   - task: VSTest@2
     displayName: Run Unit Tests
     condition: and(succeeded(), eq(variables.RunTests, 'true'))
