@@ -119,7 +119,7 @@ steps:
   #     projects: src/client.sln
   #     arguments: -p:Localize=true -p:ConsumeEndpointManager=false
   - script: |
-      dotnet build src/client.sln --configuration ${{ parameters.BuildConfiguration }} --no-restore -p:Localize=true -p:ConsumeEndpointManager=false -r ${{ parameters.BuildPlatform }} --verbosity detailed
+      dotnet build src/client.sln --configuration ${{ parameters.BuildConfiguration }} --no-restore -p:Localize=true -p:ConsumeEndpointManager=false --verbosity detailed
     displayName: Build client.sln for Loc and Tests
     condition: and(succeeded(), eq(variables.RunTests, 'true'))
     enabled: True
