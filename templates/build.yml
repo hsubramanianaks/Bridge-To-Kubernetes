@@ -110,8 +110,6 @@ steps:
     inputs:
       solution: src/client.sln
       msbuildArgs: -p:Localize=true -p:ConsumeEndpointManager=false
-      configuration: ${{ parameters.BuildConfiguration }}
-      platform: ${{ parameters.BuildPlatform }}
   - task: VSTest@2
     displayName: Run Unit Tests
     condition: and(succeeded(), eq(variables.RunTests, 'true'))
