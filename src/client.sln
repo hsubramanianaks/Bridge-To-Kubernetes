@@ -28,7 +28,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dsc", "dsc\dsc.csproj", "{3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "devhostAgent.restorationjob.tests", "devhostAgent.restorationjob.tests\devhostAgent.restorationjob.tests.csproj", "{56E8FA0C-7266-4AE7-88EC-28F924B3E586}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "devhostAgent.restorationjob", "devhostAgent.restorationjob\devhostAgent.restorationjob.csproj", "{8CD1C8F8-D634-4A61-B9EF-3052677F25C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "devhostagent.restorationjob", "devhostagent.restorationjob\devhostAgent.restorationjob.csproj", "{8CD1C8F8-D634-4A61-B9EF-3052677F25C7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "routingmanager", "routingmanager\routingmanager.csproj", "{4FE73882-FEDC-4353-B4D1-D0D678F22F1A}"
 EndProject

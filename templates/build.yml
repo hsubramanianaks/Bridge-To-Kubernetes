@@ -110,14 +110,19 @@ steps:
   #   inputs:
   #     solution: src/client.sln
   #     msbuildArgs: -p:Localize=true -p:ConsumeEndpointManager=false
-  - task: DotNetCoreCLI@2
-    displayName: build client.sln for Loc and Tests
-    enabled: True
+  # - task: DotNetCoreCLI@2
+  #   displayName: build client.sln for Loc and Tests
+  #   enabled: True
+  #   condition: and(succeeded(), eq(variables.RunTests, 'true'))
+  #   inputs:
+  #     command: build
+  #     projects: src/client.sln
+  #     arguments: -p:Localize=true -p:ConsumeEndpointManager=false
+  - script: |
+      dotnet build src/client.sln --configuration ${{ parameters.BuildConfiguration }} --no-restore -p:Localize=true -p:ConsumeEndpointManager=false -r ${{ parameters.BuildPlatform }} --verbosity detailed
+    displayName: Build client.sln for Loc and Tests
     condition: and(succeeded(), eq(variables.RunTests, 'true'))
-    inputs:
-      command: build
-      projects: src/client.sln
-      arguments: -p:Localize=true -p:ConsumeEndpointManager=false
+    enabled: True
   - task: VSTest@2
     displayName: Run Unit Tests
     condition: and(succeeded(), eq(variables.RunTests, 'true'))
