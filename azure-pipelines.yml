@@ -49,8 +49,8 @@ jobs:
     strategy:
       matrix:
         win-x64-sf:
-          TelemetryType: TELEMETRY_DEVELOPMENT
-          BuildConfiguration: "Release"
+          TelemetryType: ${{ parameters.TelemetryType }}
+          BuildConfiguration: ${{ parameters.BuildConfiguration }}
           BuildPlatform: "win-x64"
           SelfContained: true
           KubectlDownloadUrl: "https://dl.k8s.io/release/v1.27.3/bin/windows/amd64/kubectl.exe"
@@ -60,8 +60,8 @@ jobs:
           ZipFileName: "lpk-win.zip"
           poolName: "VSEngSS-MicroBuild2022-1ES"
         win-arm64-sf:
-          TelemetryType: TELEMETRY_DEVELOPMENT
-          BuildConfiguration: "Release"
+          TelemetryType: ${{ parameters.TelemetryType }}
+          BuildConfiguration: ${{ parameters.BuildConfiguration }}
           BuildPlatform: "win-arm64"
           SelfContained: true
           KubectlDownloadUrl: "https://dl.k8s.io/release/v1.27.3/bin/windows/arm64/kubectl.exe"
@@ -69,6 +69,28 @@ jobs:
           KubectlFileName: "kubectl.exe"
           ZipFilePathName: "win"
           ZipFileName: "lpk-win.zip"
+          poolName: "VSEngSS-MicroBuild2022-1ES"
+        linux-x64-sf:
+          TelemetryType: ${{ parameters.TelemetryType }}
+          BuildConfiguration: ${{ parameters.BuildConfiguration }}
+          BuildPlatform: "linux-x64"
+          SelfContained: true
+          KubectlDownloadUrl: "https://dl.k8s.io/release/v1.27.3/bin/linux/amd64/kubectl"
+          KubectlPath: "linux"
+          KubectlFileName: "kubectl"
+          ZipFilePathName: "linux"
+          ZipFileName: "lpk-linux.zip"
+          poolName: "VSEngSS-MicroBuild2022-1ES"
+        linux-arm64-sf:
+          TelemetryType: ${{ parameters.TelemetryType }}
+          BuildConfiguration: ${{ parameters.BuildConfiguration }}
+          BuildPlatform: "linux-arm64"
+          SelfContained: true
+          KubectlDownloadUrl: "https://dl.k8s.io/release/v1.27.3/bin/linux/arm64/kubectl"
+          KubectlPath: "linux"
+          KubectlFileName: "kubectl"
+          ZipFilePathName: "linux"
+          ZipFileName: "lpk-linux.zip"
           poolName: "VSEngSS-MicroBuild2022-1ES"
     pool:
       name: $(poolName)

@@ -104,12 +104,6 @@ steps:
     inputs:
       targetType: inline
       script: >-
-        if ($env:ForceStagingBuild -eq "true" -And $env:ForceProductionBuild -eq "true") {
-          Write-Host "You can't do a Staging and Production build at the same time... Duh...."
-          exit 1
-        }
-
-
         $branchName = $env:BUILD_SOURCEBRANCH
 
         if ($branchName -eq "refs/heads/main") {
