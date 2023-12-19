@@ -107,10 +107,10 @@ steps:
         $branchName = $env:BUILD_SOURCEBRANCH
 
         if ($branchName -eq "refs/heads/main") {
-            Write-Host "##vso[task.setvariable variable=TelemetryType;]${{ parameters.TelemetryType }}"
+            Write-Host "##vso[task.setvariable variable=TelemetryType;isReadonly=false]${{ parameters.TelemetryType }}"
             Write-Host "Done setting telemetry key instance as ${{ parameters.TelemetryType }} for main branch"
         } else {
-            Write-Host "##vso[task.setvariable variable=TelemetryType;]${{ parameters.TelemetryType }}"
+            Write-Host "##vso[task.setvariable variable=TelemetryType;isReadonly=false]${{ parameters.TelemetryType }}"
             Write-Host "Done setting telemetry key instance as ${{ parameters.TelemetryType }} for other branch"
         }
 
