@@ -1,3 +1,12 @@
+parameters:
+- name: ZipFilePath
+  type: string
+  default: zip
+  values:
+  - zip
+  - zipv2
+
+
 steps:
   - task: PowerShell@2
     displayName: Generate lks.json for .zip files
@@ -7,7 +16,7 @@ steps:
       script: >-
         $ZipHost = "mindaromaster.blob.core.windows.net"
 
-        $BlobUrl = "https://$ZipHost/zip/1.0.$env:BUILD_BUILDNUMBER"
+        $BlobUrl = "https://$ZipHost/${{ parameters.ZipFilePath }}/1.0.$env:BUILD_BUILDNUMBER"
 
         $ZipDir = "$env:BUILD_ARTIFACTSTAGINGDIRECTORY/zip"
 
@@ -32,3 +41,13 @@ steps:
         $Json | Out-File -FilePath $ZipDir/1.0.$env:BUILD_BUILDNUMBER/lks.json -Encoding ascii
 
         Write-Host $Json
+
+  - task: ManifestGeneratorTask@0
+    displayName: Manifest Generator for zip
+    inputs:
+      BuildDropPath: $(Build.ArtifactStagingDirectory)/zip/
+  - task: PublishBuildArtifacts@1
+    displayName: Publish generated lks.json
+    inputs:
+      PathtoPublish: $(Build.ArtifactStagingDirectory)/zip
+      ArtifactName: ${{ parameters.ZipFilePath }}

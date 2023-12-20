@@ -30,7 +30,7 @@ trigger: none
 name: $(date:yyyyMMdd)$(rev:.r)
 
 jobs:
-  - job: Build
+  - job: Build_for_others
     strategy:
       matrix:
         win-x64-sf:
@@ -78,14 +78,50 @@ jobs:
           ZipFilePathName: "osx"
           ZipFileName: "lpk-osx.zip"
           poolName: "VSEngSS-MicroBuild2022-1ES"
-        osx-arm64-sf:
-          BuildPlatform: "osx-arm64"
-          SelfContained: true
-          KubectlDownloadUrl: "https://dl.k8s.io/release/v1.27.3/bin/darwin/arm64/kubectl"
+        win-x64:
+          BuildPlatform: "win-x64"
+          SelfContained: false
+          KubectlDownloadUrl: "https://dl.k8s.io/release/v1.27.3/bin/windows/amd64/kubectl.exe"
+          KubectlPath: "win"
+          KubectlFileName: "kubectl.exe"
+          ZipFilePathName: "win"
+          ZipFileName: "lpk-win.zip"
+          poolName: "VSEngSS-MicroBuild2022-1ES"
+        linux-x64:
+          BuildPlatform: "linux-x64"
+          SelfContained: false
+          KubectlDownloadUrl: "https://dl.k8s.io/release/v1.27.3/bin/linux/amd64/kubectl"
+          KubectlPath: "linux"
+          KubectlFileName: "kubectl"
+          ZipFilePathName: "linux"
+          ZipFileName: "lpk-linux.zip"
+          poolName: "VSEngSS-MicroBuild2022-1ES"
+        osx-x64:
+          BuildPlatform: "osx-x64"
+          SelfContained: false
+          KubectlDownloadUrl: "https://dl.k8s.io/release/v1.27.3/bin/darwin/amd64/kubectl"
           KubectlPath: "osx"
           KubectlFileName: "kubectl"
           ZipFilePathName: "osx"
           ZipFileName: "lpk-osx.zip"
+          poolName: "VSEngSS-MicroBuild2022-1ES"
+        win-arm64:
+          BuildPlatform: "win-arm64"
+          SelfContained: false
+          KubectlDownloadUrl: "https://dl.k8s.io/release/v1.27.3/bin/windows/arm64/kubectl.exe"
+          KubectlPath: "win"
+          KubectlFileName: "kubectl.exe"
+          ZipFilePathName: "win"
+          ZipFileName: "lpk-win.zip"
+          poolName: "VSEngSS-MicroBuild2022-1ES"
+        linux-arm64:
+          BuildPlatform: "linux-arm64"
+          SelfContained: false
+          KubectlDownloadUrl: "https://dl.k8s.io/release/v1.27.3/bin/linux/arm64/kubectl"
+          KubectlPath: "linux"
+          KubectlFileName: "kubectl"
+          ZipFilePathName: "linux"
+          ZipFileName: "lpk-linux.zip"
           poolName: "VSEngSS-MicroBuild2022-1ES"
     pool:
       name: $(poolName)
@@ -93,6 +129,41 @@ jobs:
         - msbuild
         - visualstudio
         - DotNetFramework
+    steps:
+      - template: templates/build.yml
+        parameters:
+          TelemetryKind: ${{ parameters.TelemetryKind }}
+          BuildConfiguration: ${{ parameters.BuildConfiguration }}
+          BuildPlatform: $(BuildPlatform)
+          SelfContained: $(SelfContained)
+          KubectlDownloadUrl: $(KubectlDownloadUrl)
+          KubectlPath: $(KubectlPath)
+          KubectlFileName: $(KubectlFileName)
+          ZipFilePathName: $(ZipFilePathName)
+          ZipFileName: $(ZipFileName)
+
+  - job: Build_for_osx_arm64
+    strategy: 
+      matrix: 
+        osx-arm64-sf:
+          BuildPlatform: "osx-arm64"
+          SelfContained: true
+          KubectlDownloadUrl: "https://dl.k8s.io/release/v1.27.3/bin/darwin/arm64/kubectl"
+          KubectlPath: "osx"
+          KubectlFileName: "kubectl"
+          ZipFilePathName: "osx"
+          ZipFileName: "lpk-osx-arm64.zip"
+          vmImage: "macos-13-arm64"
+        osx-arm64:
+          BuildPlatform: "osx-arm64"
+          SelfContained: false
+          KubectlDownloadUrl: "https://dl.k8s.io/release/v1.27.3/bin/darwin/arm64/kubectl"
+          KubectlPath: "osx"
+          KubectlFileName: "kubectl"
+          ZipFilePathName: "osx"
+          ZipFileName: "lpk-osx-arm64.zip"
+          vmImage: "macos-13-arm64"
+    pool:
       vmImage: $(vmImage)
     steps:
       - template: templates/build.yml
@@ -106,4 +177,16 @@ jobs:
           KubectlFileName: $(KubectlFileName)
           ZipFilePathName: $(ZipFilePathName)
           ZipFileName: $(ZipFileName)
+
+  - job: Generate_Lks_Json
+    dependsOn: [Build_for_others, Build_for_osx_arm64]
+    pool:
+      vmImage: 'VSEngSS-MicroBuild2022-1ES'
+    steps:
       - template: templates/generate-lks.yml
+        parameters:
+          ZipFilePath: 'zip'
+      - template: templates/generate-lks.yml
+        parameters:
+          ZipFilePath: 'zipv2'
+  
