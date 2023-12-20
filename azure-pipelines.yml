@@ -86,9 +86,13 @@ jobs:
           KubectlFileName: "kubectl"
           ZipFilePathName: "osx"
           ZipFileName: "lpk-osx.zip"
-          vmImage: "macos-13-arm64"
+          poolName: "VSEngSS-MicroBuild2022-1ES"
     pool:
       name: $(poolName)
+      demands:
+        - msbuild
+        - visualstudio
+        - DotNetFramework
       vmImage: $(vmImage)
     steps:
       - template: templates/build.yml
