@@ -89,10 +89,6 @@ jobs:
           vmImage: "macos-13-arm64"
     pool:
       name: $(poolName)
-      demands:
-        - msbuild
-        - visualstudio
-        - DotNetFramework
       vmImage: $(vmImage)
     steps:
       - template: templates/build.yml
