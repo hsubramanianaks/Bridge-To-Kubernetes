@@ -74,9 +74,13 @@ steps:
     inputs:
       version: $(BuildParameters.dotnetversion)
       installationPath: $(Agent.TempDirectory)/dotnet
+  - script: |
+      echo "BuildPlatform is ${{ parameters.BuildPlatform }}"
+      echo "Previous task status: $(Agent.JobStatus)"
+    displayName: "Check BuildPlatform"
   - task: DotNetCoreCLI@2
     displayName: restore EndpointManager (Windows) (to download runtime pack)
-    # condition: and(succeeded(), or(eq('${{ parameters.BuildPlatform }}', 'win-x64'), eq('${{ parameters.BuildPlatform }}', 'win-arm64')))
+    condition: and(succeeded(), or(eq('${{ parameters.BuildPlatform }}', 'win-x64'), eq('${{ parameters.BuildPlatform }}', 'win-arm64')))
     inputs:
       command: restore
       projects: src\endpointmanager\endpointmanager.csproj
@@ -307,46 +311,46 @@ steps:
     displayName: Validate Signatures nuget
     inputs:
       Path: "$(Build.ArtifactStagingDirectory)/nuget"
-  - task: CopyFiles@2
-    displayName: Collect Build Symbols - dsc
-    enabled: True
-    inputs:
-      SourceFolder: src/dsc/bin/${{ parameters.BuildConfiguration }}/$(BuildParameters.dotnetversionforbuild)
-      Contents: >-
-        */publish/dsc.?(pdb|exe|dll|)
+  # - task: CopyFiles@2
+  #   displayName: Collect Build Symbols - dsc
+  #   enabled: True
+  #   inputs:
+  #     SourceFolder: src/dsc/bin/${{ parameters.BuildConfiguration }}/$(BuildParameters.dotnetversionforbuild)
+  #     Contents: >-
+  #       */publish/dsc.?(pdb|exe|dll|)
 
-        */publish/Microsoft.BridgeToKubernetes.*.@(pdb|exe|dll|)
+  #       */publish/Microsoft.BridgeToKubernetes.*.@(pdb|exe|dll|)
 
-        */publish/EndpointManager/EndpointManager.?(pdb|exe|dll|)
+  #       */publish/EndpointManager/EndpointManager.?(pdb|exe|dll|)
 
-        */publish/EndpointManager/Microsoft.BridgeToKubernetes.*.@(pdb|exe|dll|)
-      TargetFolder: $(Build.ArtifactStagingDirectory)/symbols
-      OverWrite: true
-  - task: PublishSymbols@2
-    displayName: Enable Source Server
-    # condition: and(succeeded(), eq(variables.RunTests, 'true'))
-    enabled: True
-    inputs:
-      SymbolsFolder: $(Build.ArtifactStagingDirectory)/symbols
-      SearchPattern: "**/*.pdb"
-      SymbolServerType: TeamServices
-  - task: CopyFiles@2
-    displayName: Copy buildWindowsPDBs.ps1 to artifact directory
-    # condition: and(succeeded(), or(eq('${{ parameters.BuildPlatform }}', 'win-x64'), eq('${{ parameters.BuildPlatform }}', 'win-arm64')))
-    enabled: True
-    inputs:
-      SourceFolder: build
-      Contents: buildWindowsPDBs.ps1
-      TargetFolder: $(Build.ArtifactStagingDirectory)/symbols/
-      OverWrite: true
-  - task: PublishBuildArtifacts@1
-    displayName: "Publish Artifact: symbols"
-    # condition: and(succeeded(), eq(variables.RunTests, 'true'))
-    enabled: True
-    inputs:
-      PathtoPublish: $(Build.ArtifactStagingDirectory)/symbols
-      ArtifactName: symbols
-      TargetPath: '\\my\share\$(Build.DefinitionName)\$(Build.BuildNumber)'
+  #       */publish/EndpointManager/Microsoft.BridgeToKubernetes.*.@(pdb|exe|dll|)
+  #     TargetFolder: $(Build.ArtifactStagingDirectory)/symbols
+  #     OverWrite: true
+  # - task: PublishSymbols@2
+  #   displayName: Enable Source Server
+  #   # condition: and(succeeded(), eq(variables.RunTests, 'true'))
+  #   enabled: True
+  #   inputs:
+  #     SymbolsFolder: $(Build.ArtifactStagingDirectory)/symbols
+  #     SearchPattern: "**/*.pdb"
+  #     SymbolServerType: TeamServices
+  # - task: CopyFiles@2
+  #   displayName: Copy buildWindowsPDBs.ps1 to artifact directory
+  #   # condition: and(succeeded(), or(eq('${{ parameters.BuildPlatform }}', 'win-x64'), eq('${{ parameters.BuildPlatform }}', 'win-arm64')))
+  #   enabled: True
+  #   inputs:
+  #     SourceFolder: build
+  #     Contents: buildWindowsPDBs.ps1
+  #     TargetFolder: $(Build.ArtifactStagingDirectory)/symbols/
+  #     OverWrite: true
+  # - task: PublishBuildArtifacts@1
+  #   displayName: "Publish Artifact: symbols"
+  #   # condition: and(succeeded(), eq(variables.RunTests, 'true'))
+  #   enabled: True
+  #   inputs:
+  #     PathtoPublish: $(Build.ArtifactStagingDirectory)/symbols
+  #     ArtifactName: symbols
+  #     TargetPath: '\\my\share\$(Build.DefinitionName)\$(Build.BuildNumber)'
   - task: tagBuildOrRelease@0
     displayName: Tag BuildConfiguration
     enabled: True
