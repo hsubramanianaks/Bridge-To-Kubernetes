@@ -80,7 +80,7 @@ steps:
     displayName: "Check BuildPlatform"
   - task: DotNetCoreCLI@2
     displayName: restore EndpointManager (Windows) (to download runtime pack)
-    condition: or(eq('${{ parameters.BuildPlatform }}', 'win-x64'), eq('${{ parameters.BuildPlatform }}', 'win-arm64'))
+    condition: and(succeededWithIssues(), or(eq('${{ parameters.BuildPlatform }}', 'win-x64'), eq('${{ parameters.BuildPlatform }}', 'win-arm64')))
     inputs:
       command: restore
       projects: src\endpointmanager\endpointmanager.csproj
