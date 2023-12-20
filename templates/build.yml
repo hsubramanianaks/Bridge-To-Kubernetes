@@ -219,7 +219,7 @@ steps:
       configuration: "${{ parameters.BuildConfiguration }} "
   - task: Bash@3
     displayName: mac code sign for ${{parameters.BuildPlatform}}
-    condition: and(succeeded(), or(eq('${{ parameters.BuildPlatform }}', 'osx-arm64')))
+    condition: and(succeeded(), eq('${{ parameters.BuildPlatform }}', 'osx-arm64'))
     inputs:
       targetType: 'inline'
       script: |
