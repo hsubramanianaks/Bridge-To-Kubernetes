@@ -74,7 +74,6 @@ steps:
     inputs:
       version: $(BuildParameters.dotnetversion)
       installationPath: $(Agent.TempDirectory)/dotnet
-- ${{ if eq(parameters.BuildPlatform, 'win-x64') || eq(parameters.BuildPlatform, 'win-arm64') }}:
   - task: DotNetCoreCLI@2
     displayName: restore EndpointManager (Windows) (to download runtime pack)
     # condition: and(succeeded(), or(eq('${{ parameters.BuildPlatform }}', 'win-x64'), eq('${{ parameters.BuildPlatform }}', 'win-arm64')))
@@ -174,7 +173,6 @@ steps:
       zipAfterPublish: false
       modifyOutputPath: false
       selectOrConfig: config
-- ${{ if eq(parameters.BuildPlatform, 'win-arm64') || eq(parameters.BuildPlatform, 'win-x64') }}:
   - task: DotNetCoreCLI@2
     displayName: publish EndpointManagerLauncher ${{ parameters.BuildPlatform }}
     # condition: and(succeeded(), or(eq('${{ parameters.BuildPlatform }}', 'win-x64'), eq('${{ parameters.BuildPlatform }}', 'win-arm64')))
@@ -187,7 +185,6 @@ steps:
       zipAfterPublish: false
       modifyOutputPath: false
       selectOrConfig: config
-- ${{ if eq(parameters.BuildPlatform, 'win-arm64') || eq(parameters.BuildPlatform, 'win-x64') }}:
   - task: CopyFiles@2
     displayName: Copy EndpointManager Launcher to dsc folder for ${{ parameters.BuildPlatform }}
     # condition: and(succeeded(), or(eq('${{ parameters.BuildPlatform }}', 'win-x64'), eq('${{ parameters.BuildPlatform }}', 'win-arm64')))
@@ -220,7 +217,6 @@ steps:
       solution: src/client.signproj
       msbuildArgs: /t:SignFiles /p:SignType=real
       configuration: "${{ parameters.BuildConfiguration }} "
-- ${{ if eq(parameters.BuildPlatform, 'osx-arm64') }}:
   - task: Bash@3
     displayName: mac code sign for ${{parameters.BuildPlatform}}
     # condition: and(succeeded(), eq('${{ parameters.BuildPlatform }}', 'osx-arm64'))
@@ -288,7 +284,6 @@ steps:
       PathtoPublish: $(Build.ArtifactStagingDirectory)/zip
       ArtifactName: zip
       TargetPath: '\\my\share\$(Build.DefinitionName)\$(Build.BuildNumber)'
-- ${{ if eq(parameters.SelfContained, 'true') }}:
   - task: DotNetCoreCLI@2
     displayName: "dotnet pack CLI NuGet (Windows)"
     # condition: and(succeeded(), eq('${{ parameters.Selfcontained }}', 'true'))
