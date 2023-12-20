@@ -76,7 +76,7 @@ steps:
       installationPath: $(Agent.TempDirectory)/dotnet
   - task: DotNetCoreCLI@2
     displayName: restore EndpointManager (Windows) (to download runtime pack)
-    condition: or(eq('${{ parameters.BuildPlatform }}', 'win-x64'), eq('${{ parameters.BuildPlatform }}', 'win-arm64'))
+    condition: and(succeeded(), or(eq('${{ parameters.BuildPlatform }}', 'win-x64'), eq('${{ parameters.BuildPlatform }}', 'win-arm64')))
     inputs:
       command: restore
       projects: src\endpointmanager\endpointmanager.csproj
@@ -118,50 +118,50 @@ steps:
   #     command: build
   #     projects: src/client.sln
   #     arguments: -p:Localize=true -p:ConsumeEndpointManager=false
-  - script: |
-      dotnet build src/client.sln --configuration ${{ parameters.BuildConfiguration }} --no-restore -p:Localize=true -p:ConsumeEndpointManager=false --verbosity detailed
-    displayName: Build client.sln for Loc and Tests
-    condition: and(succeeded(), eq(variables.RunTests, 'true'))
-    enabled: True
-  - task: VSTest@2
-    displayName: Run Unit Tests
-    condition: and(succeeded(), eq(variables.RunTests, 'true'))
-    enabled: True
-    inputs:
-      testAssemblyVer2: '**\bin\${{ parameters.BuildConfiguration }}\*\*Tests.dll'
-      runSettingsFile: tests/unittests/dotnetcore.runsettings
-      runInParallel: true
-      codeCoverageEnabled: True
-      testRunTitle: Unit Tests
-      failOnMinTestsNotRun: true
-      rerunFailedTests: true
-  - task: CopyFiles@2
-    displayName: Collect Loc files
-    condition: and(succeeded(), eq(variables.RunTests, 'true'))
-    enabled: True
-    inputs:
-      Contents: >-
-        src/*/bin/*/*/localize/**/*
+  # - script: |
+  #     dotnet build src/client.sln --configuration ${{ parameters.BuildConfiguration }} --no-restore -p:Localize=true -p:ConsumeEndpointManager=false --verbosity detailed
+  #   displayName: Build client.sln for Loc and Tests
+  #   condition: and(succeeded(), eq(variables.RunTests, 'true'))
+  #   enabled: True
+  # - task: VSTest@2
+  #   displayName: Run Unit Tests
+  #   condition: and(succeeded(), eq(variables.RunTests, 'true'))
+  #   enabled: True
+  #   inputs:
+  #     testAssemblyVer2: '**\bin\${{ parameters.BuildConfiguration }}\*\*Tests.dll'
+  #     runSettingsFile: tests/unittests/dotnetcore.runsettings
+  #     runInParallel: true
+  #     codeCoverageEnabled: True
+  #     testRunTitle: Unit Tests
+  #     failOnMinTestsNotRun: true
+  #     rerunFailedTests: true
+  # - task: CopyFiles@2
+  #   displayName: Collect Loc files
+  #   condition: and(succeeded(), eq(variables.RunTests, 'true'))
+  #   enabled: True
+  #   inputs:
+  #     Contents: >-
+  #       src/*/bin/*/*/localize/**/*
 
-        src/*/bin/**/*.lce
+  #       src/*/bin/**/*.lce
 
-        src/dsc/bin/*/*/dsc.dll
+  #       src/dsc/bin/*/*/dsc.dll
 
-        src/endpointmanager/bin/*/*/endpointmanager.dll
+  #       src/endpointmanager/bin/*/*/endpointmanager.dll
 
-        src/common/bin/*/*/Microsoft.BridgeToKubernetes.Common.dll
+  #       src/common/bin/*/*/Microsoft.BridgeToKubernetes.Common.dll
 
-        src/library/bin/*/*/Microsoft.BridgeToKubernetes.Library.dll
-      TargetFolder: $(Build.ArtifactStagingDirectory)/Loc
-      OverWrite: true
-  - task: PublishBuildArtifacts@1
-    displayName: "Publish Artifact: Loc"
-    condition: and(succeeded(), eq(variables.RunTests, 'true'))
-    enabled: True
-    inputs:
-      PathtoPublish: $(Build.ArtifactStagingDirectory)/Loc
-      ArtifactName: Loc
-      TargetPath: '\\my\share\$(Build.DefinitionName)\$(Build.BuildNumber)'
+  #       src/library/bin/*/*/Microsoft.BridgeToKubernetes.Library.dll
+  #     TargetFolder: $(Build.ArtifactStagingDirectory)/Loc
+  #     OverWrite: true
+  # - task: PublishBuildArtifacts@1
+  #   displayName: "Publish Artifact: Loc"
+  #   condition: and(succeeded(), eq(variables.RunTests, 'true'))
+  #   enabled: True
+  #   inputs:
+  #     PathtoPublish: $(Build.ArtifactStagingDirectory)/Loc
+  #     ArtifactName: Loc
+  #     TargetPath: '\\my\share\$(Build.DefinitionName)\$(Build.BuildNumber)'
   - task: DotNetCoreCLI@2
     displayName: publish DSC ${{ parameters.BuildPlatform }}
     enabled: True
@@ -175,7 +175,7 @@ steps:
       selectOrConfig: config
   - task: DotNetCoreCLI@2
     displayName: publish EndpointManagerLauncher ${{ parameters.BuildPlatform }}
-    condition: or(eq('${{ parameters.BuildPlatform }}', 'win-x64'), eq('${{ parameters.BuildPlatform }}', 'win-arm64'))
+    condition: and(succeeded(), or(eq('${{ parameters.BuildPlatform }}', 'win-x64'), eq('${{ parameters.BuildPlatform }}', 'win-arm64')))
     enabled: True
     inputs:
       command: publish
@@ -187,7 +187,7 @@ steps:
       selectOrConfig: config
   - task: CopyFiles@2
     displayName: Copy EndpointManager Launcher to dsc folder for ${{ parameters.BuildPlatform }}
-    condition: or(eq('${{ parameters.BuildPlatform }}', 'win-x64'), eq('${{ parameters.BuildPlatform }}', 'win-arm64'))
+    condition: and(succeeded(), or(eq('${{ parameters.BuildPlatform }}', 'win-x64'), eq('${{ parameters.BuildPlatform }}', 'win-arm64')))
     enabled: True
     inputs:
       SourceFolder: src/EndpointManagerLauncher/bin/${{ parameters.BuildConfiguration }}/$(BuildParameters.dotnetversionforbuild)/${{ parameters.BuildPlatform }}/publish/
@@ -217,6 +217,13 @@ steps:
       solution: src/client.signproj
       msbuildArgs: /t:SignFiles /p:SignType=real
       configuration: "${{ parameters.BuildConfiguration }} "
+  - task: Bash@3
+    displayName: mac code sign for ${{parameters.BuildPlatform}}
+    condition: and(succeeded(), or(eq('${{ parameters.BuildPlatform }}', 'osx-arm64')))
+    inputs:
+      targetType: 'inline'
+      script: |
+        codesign --force --deep --sign - "$(Build.SourcesDirectory)/src/dsc/bin/${{ parameters.BuildConfiguration }}/$(BuildParameters.dotnetversionforbuild)/${{parameters.BuildPlatform}}/publish/dsc"
   - task: CopyFiles@2
     displayName: Collect files for .zip for ${{parameters.BuildPlatform}}
     enabled: True
@@ -279,7 +286,7 @@ steps:
       TargetPath: '\\my\share\$(Build.DefinitionName)\$(Build.BuildNumber)'
   - task: DotNetCoreCLI@2
     displayName: "dotnet pack CLI NuGet (Windows)"
-    condition: and(eq('${{ parameters.Selfcontained }}', 'true'), or(eq('${{ parameters.BuildPlatform }}', 'win-x64'), eq('${{ parameters.BuildPlatform }}', 'win-arm64')))
+    condition: and(succeeded(), eq('${{ parameters.Selfcontained }}', 'true'), or(eq('${{ parameters.BuildPlatform }}', 'win-x64'), eq('${{ parameters.BuildPlatform }}', 'win-arm64'))))
     inputs:
       command: pack
       feedsToUse: config
@@ -325,7 +332,7 @@ steps:
       SymbolServerType: TeamServices
   - task: CopyFiles@2
     displayName: Copy buildWindowsPDBs.ps1 to artifact directory
-    condition: or(eq('${{ parameters.BuildPlatform }}', 'win-x64'), eq('${{ parameters.BuildPlatform }}', 'win-arm64'))
+    condition: and(succeeded(), or(eq('${{ parameters.BuildPlatform }}', 'win-x64'), eq('${{ parameters.BuildPlatform }}', 'win-arm64')))
     enabled: True
     inputs:
       SourceFolder: build

@@ -86,7 +86,7 @@ jobs:
           KubectlFileName: "kubectl"
           ZipFilePathName: "osx"
           ZipFileName: "lpk-osx.zip"
-          poolName: "VSEngSS-MicroBuild2022-1ES"
+          vmImage: "macos-13-arm64"
     pool:
       name: $(poolName)
       demands:
