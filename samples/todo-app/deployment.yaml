@@ -99,9 +99,16 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/os: linux
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 2000
       containers:
       - name: stats-api
         image: mindarodev.azurecr.io/samples/stats-api:v4
+        securityContext:
+          allowPrivilegeEscalation: false
         livenessProbe:
           httpGet:
             path: /hello
