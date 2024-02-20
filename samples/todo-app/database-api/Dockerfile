@@ -7,6 +7,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0-cbl-mariner2.0@sha256:e14034d5ba09b02204d5
 ARG TARGETARCH
 WORKDIR /src
 COPY ["databaseApi.csproj", ""]
+RUN dotnet clean
 RUN dotnet restore "databaseApi.csproj" -a ${TARGETARCH}
 COPY . .
 WORKDIR "/src/."
