@@ -9,6 +9,7 @@ ARG MindaroBuildNumber=0.0
 WORKDIR /src/devhostagent
 COPY /src/devhostagent/devhostAgent.csproj .
 COPY /src/common/common.csproj /src/common/
+RUN dotnet clean
 RUN dotnet restore -a ${TARGETARCH}
 COPY /src/devhostagent/ /src/devhostagent/
 COPY /src/common/ /src/common/
