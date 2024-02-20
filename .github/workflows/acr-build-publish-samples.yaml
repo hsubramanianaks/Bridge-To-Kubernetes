@@ -51,20 +51,20 @@ jobs:
           registry: ${{ vars.ACR_REGISTRY }}
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
-      - name: Set docker file name
+      - name: Set context path
         shell: bash
         id: version
         run: |
             if [ ${{ matrix.components}} == "mi-webapp" ]; then
-              echo "filename=samples/managed-identity/Dockerfile" >> $GITHUB_ENV
+              echo "pathname=samples/managed-identity" >> $GITHUB_ENV
             else
-              echo "filename=samples/todo-app/${{ matrix.components }}/Dockerfile" >> $GITHUB_ENV
+              echo "pathname=samples/todo-app/${{ matrix.components }}" >> $GITHUB_ENV
             fi
       - name: Build and push for ${{ matrix.components }}
         uses: docker/build-push-action@4a13e500e55cf31b7a5d59a38ab2040ab0f42f56 # v5.1.0
         with:
-          file: ${{ env.filename }}
-          context: .
+          file: ${{ env.pathname }}/Dockerfile
+          context: ${{ env.pathname }}
           platforms: linux/arm64,linux/amd64
           push: true
           tags: ${{ vars.ACR_REGISTRY }}/${{ matrix.imageName }}:${{ github.event.inputs.tag }}
