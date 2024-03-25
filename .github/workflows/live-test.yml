@@ -61,7 +61,7 @@ jobs:
         version: latest
     - name: Start minikube for ubuntu 
       if: ${{ matrix.os == 'ubuntu-latest' }}
-      uses: medyagh/setup-minikube@64d97a2c38f2f9fd1d891d949f6068eac2330c4a
+      uses: medyagh/setup-minikube@499bd7f2a7df8fb7145a65b34abebfe633eed25e
       with:
        driver: docker
     - name: create todo-app namespace
