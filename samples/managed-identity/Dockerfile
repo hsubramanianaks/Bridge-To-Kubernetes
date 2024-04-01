@@ -5,7 +5,7 @@ ARG TARGETARCH
 WORKDIR /app
 EXPOSE 80
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0-cbl-mariner2.0@sha256:9e054d0663d07e09127d114f753c1068d0bf681eab188352d06f111ce68f050f AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0-cbl-mariner2.0@sha256:17c634c9734df912b2744313c392e35c3bcb13d1f899c5029efaba663e977e03 AS build
 ARG TARGETARCH
 WORKDIR /src
 COPY "mi-webapp.csproj" .
