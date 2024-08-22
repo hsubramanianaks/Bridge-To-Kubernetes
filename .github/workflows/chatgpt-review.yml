@@ -16,7 +16,7 @@ jobs:
       with:
         egress-policy: audit
 
-    - uses: feiskyer/ChatGPT-Reviewer@731b69f6b38eb33cff485254a4258790ebfba257 # v0.3
+    - uses: feiskyer/ChatGPT-Reviewer@d6f45d2395af832ff3061bee8303a09265800d1e # v0.8
       name: ChatGPT Review
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
